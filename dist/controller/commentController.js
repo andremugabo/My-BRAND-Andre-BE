@@ -41,8 +41,8 @@ exports.fetchAllComments = fetchAllComments;
 //fetch comment by user id
 const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_id } = req.params;
-        const comment = yield commentModel_1.default.find({ u_id: u_id });
+        const { userId } = req.params;
+        const comment = yield commentModel_1.default.find({ userId: userId });
         res.status(200).json(comment);
     }
     catch (error) {
@@ -54,13 +54,13 @@ exports.fetchCommentByUser = fetchCommentByUser;
 //patch comment  by user id and comment id
 const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_id } = req.params;
+        const { userId } = req.params;
         const { id } = req.params;
-        const comment = yield commentModel_1.default.updateOne({ u_id: u_id, _id: id }, req.body);
+        const comment = yield commentModel_1.default.updateOne({ userId: userId, _id: id }, req.body);
         if (!comment) {
-            return res.status(404).json({ message: `Cannot find any Comment with ID${id} and user ID ${u_id}` });
+            return res.status(404).json({ message: `Cannot find any Comment with ID${id} and user ID ${userId}` });
         }
-        res.status(200).json(comment);
+        res.status(200).json({ comment, message: `Comment deleted` });
     }
     catch (error) {
         console.log(error.message);

@@ -1,41 +1,41 @@
 import mongoose,{Schema, Document} from "mongoose";
 
 export interface IBlog extends Document{
-    u_id :string;
-    bc_id:string;
-    b_title: string;
-    b_description:string;
-    b_content:string;
-    b_img: string;
-    b_date: string;
+    userId :string;
+    blogCategoryId:string;
+    blogTitle: string;
+    blogDescription:string;
+    blogContent:string;
+    blogImg: string;
+    blogDate: string;
 }
 
 const blogSchema : Schema = new Schema({
-    u_id:{
+    userId:{
         type:String,
         required:[true],
     },
-    bc_id:{
+    blogCategoryId:{
         type:String,
         required:[true]
     },
-    b_title:{
+    blogTitle:{
         type:String,
         required:[true,'Blog title is required'],
     },
-    b_description:{
+    blogDescription:{
         type:String,
         required:[true,'Blog description is required'],
     },
-    b_content:{
+    blogContent:{
         type:String,
         required:[true,'Blog content is required'],
     },
-    b_img:{
+    blogImg:{
         type:String,
         required:[true,'Blog image is required'],
     },
-    b_date:{
+    blogDate:{
         type:String,
     }
 });

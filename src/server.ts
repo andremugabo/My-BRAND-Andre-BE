@@ -7,6 +7,8 @@ import { createBlog, fetchBlog, fetchBlogById,fetchBlogByUserIdAndBlogId ,patchB
 import { createComment,fetchCommentByUser,fetchAllComments,patchCommentByUserById } from './controller/commentController';
 import { createContactMsg, fetchAllContactMsg, patchContactMsgById } from './controller/contactMsgController';
 import { createLike, fetchAllLike, fetchLikeByUserIdByComment, deleteLikeByUserIdAndCommentId } from './controller/likeController';
+import { verifyToken } from './authentication/verifyToken';
+
 
 const app = express();
 
@@ -23,58 +25,58 @@ app.post('/users', createUser);
 //LOGIN 
 app.post('/user',login);
 // FETCH ALL USER
-app.get('/users', fetchUsers);
+app.get('/users', verifyToken ,fetchUsers);
 // FETCH USERS BY ID
-app.get('/user/:id', fetchUserById);
+app.get('/user/:id', verifyToken, fetchUserById);
 // UPDATE USER BY ID
-app.patch('/user/:id', patchUserById);
+app.patch('/user/:id', verifyToken, patchUserById);
 // DELETE USER BY ID
-app.delete('/user/:id', deleteUserById);
+app.delete('/user/:id', verifyToken, deleteUserById);
 
 // CATEGORY APIs
 
 //CREATE A CATEGORY
-app.post('/category',createCategory);
+app.post('/category',  verifyToken, createCategory);
 //FETCH ALL CATEGORY
-app.get('/categories',fetchAllCategory);
+app.get('/categories',  verifyToken, fetchAllCategory);
 //DELETE CATEGORY BY ID
-app.delete('/category/:id', deleteCategory);
+app.delete('/category/:id',  verifyToken, deleteCategory);
 
 
 // BLOG APIs
 
 // CREATE A BLOG
-app.post('/blogs', createBlog);
+app.post('/blogs',  verifyToken,  createBlog);
 // FETCH ALL BLOG
-app.get('/blogs', fetchBlog);
+app.get('/blogs',   verifyToken,  fetchBlog);
 // FETCH BLOG BY ID
-app.get('/blog/:id', fetchBlogById);
+app.get('/blog/:id',   verifyToken, fetchBlogById);
 //FETCH BLOG BY USER ID AND BLOG ID
-app.get('/blog/:u_id/:b_id', fetchBlogByUserIdAndBlogId);
+app.get('/blog/:userId/:blogId',   verifyToken, fetchBlogByUserIdAndBlogId);
 // UPDATE BLOG BY ID
-app.patch('/blog/:id', patchBlogById);
+app.patch('/blog/:id',   verifyToken, patchBlogById);
 // DELETE BLOG BY ID
-app.delete('/blog/:id', deleteBlog);
+app.delete('/blog/:id',  verifyToken,  deleteBlog);
 
 // COMMENT APIs
 
 //CREATE A COMMENT
-app.post('/comments',createComment);
+app.post('/comments',   verifyToken, createComment);
 //FETCH ALL COMMENT
-app.get('/comments',fetchAllComments);
+app.get('/comments',  verifyToken, fetchAllComments);
 //FETCH COMMENT BY USER
-app.get('/comment/:u_id',fetchCommentByUser);
+app.get('/comment/:userId',  verifyToken, fetchCommentByUser);
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/comment/:u_id/:id',patchCommentByUserById);
+app.patch('/comment/:userId/:id',  verifyToken, patchCommentByUserById);
 
 // MESSAGE APIs
 
 //CREATE A CONTACT MESSAGE
 app.post('/contactMsgs',createContactMsg);
 //FETCH ALL CONTACT MSG
-app.get('/contactMsgs',fetchAllContactMsg);
+app.get('/contactMsgs',  verifyToken, fetchAllContactMsg);
 //PATCH CONTACT MSG
-app.patch('/readMsg/:id',patchContactMsgById);
+app.patch('/readMsg/:id',  verifyToken, patchContactMsgById);
 
 // LIKE APIs
 
@@ -82,10 +84,10 @@ app.patch('/readMsg/:id',patchContactMsgById);
 app.post('/likes',createLike);
 //FETCH ALL LIKE
 app.get('/likes',fetchAllLike);
-//FETCH LIKE BY USER U_ID AND COMMENT ID
-app.get('/like/:u_id/:c_id',fetchLikeByUserIdByComment);
+//FETCH LIKE BY USER userID AND COMMENT ID
+app.get('/like/:userId/:commentId',fetchLikeByUserIdByComment);
 //DELETE LIKE BY USER ID AND COMMENT ID
-app.delete('/like/:u_id/:c_id',deleteLikeByUserIdAndCommentId);
+app.delete('/like/:userId/:commentId',deleteLikeByUserIdAndCommentId);
 
 
 

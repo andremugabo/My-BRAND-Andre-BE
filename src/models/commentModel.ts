@@ -1,31 +1,31 @@
 import mongoose, {Schema, Document} from "mongoose";
 
 export interface IComment extends Document{
-    u_id:string;
-    b_id:string;
-    c_msg:string;
-    c_like:number;
-    c_date:string;
+    userId:string;
+    blogId:string;
+    commentMsg:string;
+    commentLike:number;
+    commentDate:string;
 }
 
 const commentSchema: Schema = new Schema({
-    u_id:{
+    userId:{
         type:String,
         required:[true],
     },
-    b_id:{
+    blogId:{
         type:String,
         required:true,
     },
-    c_msg:{
+    commentMsg:{
         type:String,
         required:[true,'Comment message is required'],
     },
-    c_like:{ 
+    commentLike:{ 
         type:Number,
         default:0,
     },
-    c_date:{
+    commentDate:{
         type:String,
     }
 });

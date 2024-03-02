@@ -2,32 +2,37 @@ import express from 'express';
 import bcrypt from 'bcrypt'; // Import bcrypt library
 import Users, { IUsers } from '../models/usersModel';
 import jsonwebtoken from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
+
+ 
+
 
 // Create user
 export const createUser = async (req: express.Request, res: express.Response) => {
     try {
-        const { u_fullName, u_email, u_password } = req.body;
+        const { userFullName, userEmail, userPassword } = req.body;
 
         // Validate required fields
-        if (!u_fullName || !u_email || !u_password) {
+        if (!userFullName || !userEmail || !userPassword) {
             return res.status(400).json({ message: "Please provide all information!" });
         }
 
         // Check if email already exists
-        const checkIfEmailExist = await Users.findOne({u_email});
+        const checkIfEmailExist = await Users.findOne({userEmail});
         if (checkIfEmailExist) {
             console.log("here");
             return res.status(400).json({ message: "Email already exists!" });
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(u_password, 10);
+        const hashedPassword = await bcrypt.hash(userPassword, 10);
 
         // Create user with hashed password
         const user = await Users.create({
-            u_fullName,
-            u_email,
-            u_password: hashedPassword 
+            userFullName,
+            userEmail,
+            userPassword: hashedPassword 
         });
 
         res.status(200).json(user);
@@ -41,23 +46,26 @@ export const createUser = async (req: express.Request, res: express.Response) =>
 
 export const login = async(req: express.Request, res:express.Response)=>{
         try {
-            const {u_email, u_password} = req.body;
+            const {userEmail, userPassword} = req.body;
 
-            if(!u_email || !u_password){
+            if(!userEmail || !userPassword){
                 res.status(400).json({message:"Please Provide your Email and Password"});
             }
 
-            const loginUser = await Users.findOne({u_email});
+            const loginUser = await Users.findOne({userEmail});
             if(!loginUser){
                 return res.status(400).json({message:"Your are not registered !!!"});
             }
 
-            const checkPassword = await bcrypt.compare(u_password, loginUser.u_password);
+            const checkPassword = await bcrypt.compare(userPassword, loginUser.userPassword);
             if(!checkPassword){
                 return res.status(400).json({message:"Incorrect password !!"});
             }
 
-            const token = jsonwebtoken.sign({id: loginUser._id},'654321',{expiresIn:'1h'});
+            // if (!process.env.KEY_TOKEN) {
+            //     throw new Error('KEY_TOKEN environment variable is not defined.');
+            // }
+            const token = jsonwebtoken.sign({user: loginUser.userEmail},'987654321',{expiresIn:'1h'});
             res.status(200).json({token})
 
             
@@ -70,7 +78,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
 //fetch all user
 export const fetchUsers = async(req: express.Request, res: express.Response)=>{
     try {
-        const users = await Users.find({});
+        const users = await Users.find({}, { userPassword: 0 });
         res.status(200).json(users);
     } catch (error) {
         console.log((error as Error).message);

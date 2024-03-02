@@ -10,7 +10,7 @@ export const createContactMsg = async(req: express.Request, res: express.Respons
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
-    }
+    }   
 }
 
 //fetch all contactMsg

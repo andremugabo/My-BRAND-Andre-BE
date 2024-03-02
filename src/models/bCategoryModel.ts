@@ -1,11 +1,11 @@
 import mongoose,{Schema, Document} from "mongoose";
 
 export interface IBCategory extends Document {
-    bc_name:string;
+    blogCategoryName:string;
 }
 
 const bCategory:Schema  = new Schema({
-    bc_name:{
+    blogCategoryName:{
         type:String,
         required:[true,'Please Blog category name is required']
     }

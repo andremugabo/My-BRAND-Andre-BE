@@ -25,8 +25,8 @@ export const fetchAllComments = async(req: express.Request, res: express.Respons
 //fetch comment by user id
 export const fetchCommentByUser = async(req: express.Request, res: express.Response)=>{
     try {
-        const {u_id} = req.params;
-        const comment = await Comment.find({u_id:u_id});
+        const {userId} = req.params;
+        const comment = await Comment.find({userId:userId});
         res.status(200).json(comment);
     } catch (error) {
         console.log((error as Error).message);
@@ -36,13 +36,13 @@ export const fetchCommentByUser = async(req: express.Request, res: express.Respo
 //patch comment  by user id and comment id
 export const patchCommentByUserById = async(req: express.Request, res: express.Response)=>{
     try {
-        const {u_id} = req.params;    
+        const {userId} = req.params;    
         const {id} = req.params;
-        const comment = await Comment.updateOne({u_id: u_id,_id:id},req.body);
+        const comment = await Comment.updateOne({userId: userId,_id:id},req.body);
         if(!comment){
-            return res.status(404).json({message:`Cannot find any Comment with ID${id} and user ID ${u_id}`});
+            return res.status(404).json({message:`Cannot find any Comment with ID${id} and user ID ${userId}`});
         }
-        res.status(200).json(comment);
+        res.status(200).json({comment, message:`Comment deleted`});
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});

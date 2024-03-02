@@ -26,22 +26,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserById = exports.deleteUserById = exports.createUser = exports.getUsersById = exports.getUsersByEmail = exports.getUsers = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
-    u_fullName: {
+    userFullName: {
         type: String,
         required: [true, 'Please enter your fullName']
     },
-    u_email: {
+    userEmail: {
         type: String,
-        required: [true, 'Please enter your email']
+        required: [true, 'Please enter your email'],
+        unique: true
     },
-    u_password: {
+    userPassword: {
         type: String,
         required: [true, "Please enter your password"]
     },
-    u_pic: {
+    userPic: {
         type: String,
     },
-    u_desc: {
+    userDesc: {
         type: String,
     }
 });

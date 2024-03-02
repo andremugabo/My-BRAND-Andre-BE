@@ -25,23 +25,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const commentSchema = new mongoose_1.Schema({
-    u_id: {
+    userId: {
         type: String,
         required: [true],
     },
-    b_id: {
+    blogId: {
         type: String,
         required: true,
     },
-    c_msg: {
+    commentMsg: {
         type: String,
         required: [true, 'Comment message is required'],
     },
-    c_like: {
+    commentLike: {
         type: Number,
         default: 0,
     },
-    c_date: {
+    commentDate: {
         type: String,
     }
 });

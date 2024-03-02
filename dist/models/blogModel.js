@@ -25,31 +25,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const blogSchema = new mongoose_1.Schema({
-    u_id: {
+    userId: {
         type: String,
         required: [true],
     },
-    bc_id: {
+    blogCategoryId: {
         type: String,
         required: [true]
     },
-    b_title: {
+    blogTitle: {
         type: String,
         required: [true, 'Blog title is required'],
     },
-    b_description: {
+    blogDescription: {
         type: String,
         required: [true, 'Blog description is required'],
     },
-    b_content: {
+    blogContent: {
         type: String,
         required: [true, 'Blog content is required'],
     },
-    b_img: {
+    blogImg: {
         type: String,
         required: [true, 'Blog image is required'],
     },
-    b_date: {
+    blogDate: {
         type: String,
     }
 });

@@ -16,27 +16,29 @@ exports.deleteUserById = exports.patchUserById = exports.fetchUserById = exports
 const bcrypt_1 = __importDefault(require("bcrypt")); // Import bcrypt library
 const usersModel_1 = __importDefault(require("../models/usersModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 // Create user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_fullName, u_email, u_password } = req.body;
+        const { userFullName, userEmail, userPassword } = req.body;
         // Validate required fields
-        if (!u_fullName || !u_email || !u_password) {
+        if (!userFullName || !userEmail || !userPassword) {
             return res.status(400).json({ message: "Please provide all information!" });
         }
         // Check if email already exists
-        const checkIfEmailExist = yield usersModel_1.default.findOne({ u_email });
+        const checkIfEmailExist = yield usersModel_1.default.findOne({ userEmail });
         if (checkIfEmailExist) {
             console.log("here");
             return res.status(400).json({ message: "Email already exists!" });
         }
         // Hash the password
-        const hashedPassword = yield bcrypt_1.default.hash(u_password, 10);
+        const hashedPassword = yield bcrypt_1.default.hash(userPassword, 10);
         // Create user with hashed password
         const user = yield usersModel_1.default.create({
-            u_fullName,
-            u_email,
-            u_password: hashedPassword
+            userFullName,
+            userEmail,
+            userPassword: hashedPassword
         });
         res.status(200).json(user);
     }
@@ -49,19 +51,22 @@ exports.createUser = createUser;
 // Login 
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_email, u_password } = req.body;
-        if (!u_email || !u_password) {
+        const { userEmail, userPassword } = req.body;
+        if (!userEmail || !userPassword) {
             res.status(400).json({ message: "Please Provide your Email and Password" });
         }
-        const loginUser = yield usersModel_1.default.findOne({ u_email });
+        const loginUser = yield usersModel_1.default.findOne({ userEmail });
         if (!loginUser) {
             return res.status(400).json({ message: "Your are not registered !!!" });
         }
-        const checkPassword = yield bcrypt_1.default.compare(u_password, loginUser.u_password);
+        const checkPassword = yield bcrypt_1.default.compare(userPassword, loginUser.userPassword);
         if (!checkPassword) {
             return res.status(400).json({ message: "Incorrect password !!" });
         }
-        const token = jsonwebtoken_1.default.sign({ id: loginUser._id }, '654321', { expiresIn: '1h' });
+        // if (!process.env.KEY_TOKEN) {
+        //     throw new Error('KEY_TOKEN environment variable is not defined.');
+        // }
+        const token = jsonwebtoken_1.default.sign({ user: loginUser.userEmail }, '987654321', { expiresIn: '1h' });
         res.status(200).json({ token });
     }
     catch (error) {
@@ -73,7 +78,7 @@ exports.login = login;
 //fetch all user
 const fetchUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield usersModel_1.default.find({});
+        const users = yield usersModel_1.default.find({}, { userPassword: 0 });
         res.status(200).json(users);
     }
     catch (error) {
