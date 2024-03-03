@@ -2,8 +2,8 @@ import express from 'express';
 import bcrypt from 'bcrypt'; // Import bcrypt library
 import Users, { IUsers } from '../models/usersModel';
 import jsonwebtoken from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
  
 
@@ -65,7 +65,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
             // if (!process.env.KEY_TOKEN) {
             //     throw new Error('KEY_TOKEN environment variable is not defined.');
             // }
-            const token = jsonwebtoken.sign({user: loginUser.userEmail},'987654321',{expiresIn:'1h'});
+            const token = jsonwebtoken.sign({user: loginUser.userEmail}, '987654321', {expiresIn:'1h'});
             res.status(200).json({token})
 
             

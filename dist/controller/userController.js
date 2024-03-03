@@ -16,8 +16,8 @@ exports.deleteUserById = exports.patchUserById = exports.fetchUserById = exports
 const bcrypt_1 = __importDefault(require("bcrypt")); // Import bcrypt library
 const usersModel_1 = __importDefault(require("../models/usersModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 // Create user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -26,6 +26,10 @@ const userSchema: Schema = new Schema({
     },
     userDesc:{
         type:String,
+    },
+    isAdmin: {
+        type: Boolean,
+        default:false
     }
 });
 const Users = mongoose.model<IUsers>('Users',userSchema);

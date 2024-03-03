@@ -10,7 +10,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
             if (err) {
                 res.sendStatus(403);
             } else {
-                if (auth.user === "andre@gmail.com") {
+                if (auth.user.isAdmin) {
                     // Create the blog
                     Blog.create(req.body)
                         .then(blog => {
@@ -21,7 +21,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
                             res.status(500).json({ message: (error as Error).message });
                         });
                 } else {
-                    res.status(401).json({ message: "YOU ARE NOT AUTHORIZED" });
+                    res.status(401).json({ message: "YOU ARE NOT AUTHORIZED. Only admins can post blogs" });
                 }
             }
         });
@@ -31,27 +31,6 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
     }
 };
 
-// export const createBlog = async(req: express.Request, res: express.Response)=>{
-//     try {
-//         jwt.verify((req as any).myAppToken, '987654321',(err: VerifyErrors | null, auth:any)=>{
-//             if(err){
-//                 res.sendStatus(403);
-//             }else{
-//                 if(auth.user === "andre@gmail.com"){
-//                      const blogs = Blog.create(req.body);
-//                     res.status(200).json(blogs,{auth,message:"Blog Created"});
-//                 }else{
-//                     res.status(401).json({message:"YOU ARE NOT AUTHORIZED"})
-//                 }
-               
-//             }
-//         } )
-        
-//     } catch (error) {
-//         console.log((error as Error).message);
-//         res.status(500).json({message:(error as Error).message});
-//     }
-// }
 
 //fetch all blog
 export const fetchBlog = async(req: express.Request, res: express.Response)=>{
