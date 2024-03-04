@@ -1,4 +1,5 @@
 import mongoose, {Schema, Document} from "mongoose";
+import joi from 'joi';
 
 export interface IComment extends Document{
     userId:string;
@@ -26,9 +27,20 @@ const commentSchema: Schema = new Schema({
         default:0,
     },
     commentDate:{
-        type:String,
+        type:Date,
+        default:Date.now
     }
 });
 
 const Comment = mongoose.model<IComment>('Comment',commentSchema);
 export default Comment;
+export const joiCommentValidation = (commentEntry: IComment)=>{
+    const schema = joi.object({
+        userId : joi.string().required(),
+        blogId : joi.string().required(),
+        commentMsg: joi.string().min(3).max(500).required(),
+        commentLike: joi.number().default(0),
+        commentDate: joi.date().timestamp()
+    });
+     return schema.validate(commentEntry);
+}

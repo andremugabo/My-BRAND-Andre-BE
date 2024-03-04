@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
-  "scripts": {
+  "scripts": {  
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "nodemon dist/server.js --env-file=.env "
+    "dev": "nodemon dist/server.js"
   },
   "keywords": [],
   "author": "",

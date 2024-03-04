@@ -22,8 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.joiCommentValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const joi_1 = __importDefault(require("joi"));
 const commentSchema = new mongoose_1.Schema({
     userId: {
         type: String,
@@ -42,8 +47,20 @@ const commentSchema = new mongoose_1.Schema({
         default: 0,
     },
     commentDate: {
-        type: String,
+        type: Date,
+        default: Date.now
     }
 });
 const Comment = mongoose_1.default.model('Comment', commentSchema);
 exports.default = Comment;
+const joiCommentValidation = (commentEntry) => {
+    const schema = joi_1.default.object({
+        userId: joi_1.default.string().required(),
+        blogId: joi_1.default.string().required(),
+        commentMsg: joi_1.default.string().min(3).max(500).required(),
+        commentLike: joi_1.default.number().default(0),
+        commentDate: joi_1.default.date().timestamp()
+    });
+    return schema.validate(commentEntry);
+};
+exports.joiCommentValidation = joiCommentValidation;

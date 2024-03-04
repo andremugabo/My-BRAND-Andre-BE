@@ -1,5 +1,8 @@
+import { json } from 'body-parser';
 import express from 'express';
-import JsonWebToken  from "jsonwebtoken";
+import  jwt, { VerifyErrors }  from 'jsonwebtoken';
+import Users, { IUsers, getUsersById } from '../models/usersModel';
+import { Document, Types } from 'mongoose';
 
 
 //FORMAT OF TOKEN
@@ -28,3 +31,22 @@ export const verifyToken = (req: express.Request,res: express.Response, next: ex
  
 }
 
+interface User {
+    sub: string;
+    iat: number;
+    exp: number;
+}
+
+export const getUser = async (token:string) : Promise<IUsers | null>  =>{
+    const decoded = jwt.verify(token, '987654321');
+    const user = await getUsersById(decoded.sub as string)
+    console.log(user + "s")
+    const usr = {
+        _id: user!._id,
+        userEmail: user!.email,
+        userFullName: user!.FullName,
+        userPassword: user!.password,
+        isAdmin: user!.isAdmin,
+    } as any
+    return usr;
+}
