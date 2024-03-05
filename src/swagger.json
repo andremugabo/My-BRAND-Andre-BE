@@ -1,0 +1,367 @@
+
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "MY-BRAND-ANDRE-BE",
+    "description": "A description for my APIs backend",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "tags": [
+    {
+      "name": "User",
+      "description": "API for user in MY-BRAND-ANDRE-BE"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "description": "JWT authorization of an API",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "Creates a new user with the provided information",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Invalid user data provided"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Fetch all users",
+        "description": "Retrieves a list of all users",
+        "responses": {
+          "200": {
+            "description": "List of users retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized: Token missing or invalid"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Fetch user by ID",
+        "description": "Retrieves user details by their ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to fetch",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized: Token missing or invalid"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update user by ID",
+        "description": "Updates user details by their ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to update",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "400": {
+            "description": "Invalid user data provided"
+          },
+          "401": {
+            "description": "Unauthorized: Token missing or invalid"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user by ID",
+        "description": "Deletes user by their ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the user to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized: Token missing or invalid"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Login",
+        "description": "Logs in the user with the provided credentials",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Username"
+                },
+                "password": {
+                  "type": "string",
+                 
+
+ "description": "Password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          },
+          "400": {
+            "description": "Invalid login credentials"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+
+  
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "FullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "FullName",
+        "email",
+        "password"
+      ]
+    },
+    "BCategory": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "category"
+      ]
+    },
+    "Blog": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "blogCategoryId": {
+          "type": "string"
+        },
+        "blogTitle": {
+          "type": "string"
+        },
+        "blogDescription": {
+          "type": "string"
+        },
+        "blogContent": {
+          "type": "string"
+        },
+        "blogImg": {
+          "type": "string"
+        },
+        "blogDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "blogCategoryId",
+        "blogTitle",
+        "blogDescription",
+        "blogContent",
+        "blogImg",
+        "blogDate"
+      ]
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "blogId": {
+          "type": "string"
+        },
+        "commentMsg": {
+          "type": "string"
+        },
+        "commentLike": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "byUser": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "like": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "userId"
+                ]
+              }
+            }
+          }
+        },
+        "commentDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "blogId",
+        "commentMsg",
+        "commentLike",
+        "commentDate"
+      ]
+    },
+    "ContactMsg": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "read": {
+          "type": "string",
+          "enum": [
+            "1",
+            "0"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "msg",
+        "read"
+      ]
+    }
+  }
+}

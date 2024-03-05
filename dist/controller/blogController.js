@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBlog = exports.patchBlogById = exports.fetchBlogByUserIdAndBlogId = exports.fetchBlogById = exports.fetchBlog = exports.createBlog = void 0;
+exports.deleteBlog = exports.patchBlogById = exports.fetchBlogById = exports.fetchBlog = exports.createBlog = void 0;
 const blogModel_1 = __importStar(require("../models/blogModel"));
 const verifyToken_1 = require("../authentication/verifyToken");
 //create blog
@@ -41,6 +41,8 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const user = yield (0, verifyToken_1.getUser)(req.myAppToken);
         const { error } = (0, blogModel_1.joinBlogValidation)(req.body);
         if (error) {
+            console.error(error);
+            res.status(400).json({ error: error.details[0].message });
         }
         // console.log(user)
         if (user && user.isAdmin) {
@@ -68,7 +70,12 @@ exports.createBlog = createBlog;
 const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const blogs = yield blogModel_1.default.find({});
-        res.status(200).json(blogs);
+        if (blogs.length === 0) {
+            res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
+        }
+        else {
+            res.status(200).json(blogs);
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -79,9 +86,15 @@ exports.fetchBlog = fetchBlog;
 //fetch blog by id
 const fetchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const blog = yield blogModel_1.default.findById(id);
-        res.status(200).json(blog);
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser) {
+            const { id } = req.params;
+            const blog = yield blogModel_1.default.findById(id);
+            res.status(200).json(blog);
+        }
+        else {
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -89,23 +102,6 @@ const fetchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.fetchBlogById = fetchBlogById;
-//fetch blog by user id and blog id
-const fetchBlogByUserIdAndBlogId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { userId } = req.params;
-        const { blogId } = req.params;
-        const blog = yield blogModel_1.default.findOne({ userId: userId, _id: blogId }, req.body);
-        if (!blog) {
-            return res.status(404).json({ message: 'Blog not found for the specified userID and blogID' });
-        }
-        res.status(200).json(blog);
-    }
-    catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: error.message });
-    }
-});
-exports.fetchBlogByUserIdAndBlogId = fetchBlogByUserIdAndBlogId;
 //patch blog by id
 const patchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -131,12 +127,18 @@ exports.patchBlogById = patchBlogById;
 //Delete blog by id
 const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const blog = yield blogModel_1.default.deleteOne({ _id: id });
-        if (blog.deletedCount === 0) {
-            return res.status(404).json({ message: `cannot find any category with ID ${id}` });
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser && checkUser.isAdmin) {
+            const { id } = req.params;
+            const blog = yield blogModel_1.default.deleteOne({ _id: id });
+            if (blog.deletedCount === 0) {
+                return res.status(404).json({ message: `cannot find any category with ID ${id}` });
+            }
+            res.status(200).json({ blog, message: "Blog deleted successfully " });
         }
-        res.status(200).json(blog);
+        else {
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A BLOG" });
+        }
     }
     catch (error) {
         console.log(error.message);

@@ -47,8 +47,14 @@ const createComment = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             console.error(error);
             res.status(400).json({ error: error.details[0].message });
         }
-        const comments = yield commentModel_1.default.create(req.body);
-        res.status(200).json(comments);
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser) {
+            const comments = yield commentModel_1.default.create(req.body);
+            res.status(200).json(comments);
+        }
+        else {
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -59,8 +65,14 @@ exports.createComment = createComment;
 //fetch all comment
 const fetchAllComments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const comments = yield commentModel_1.default.find({});
-        res.status(200).json(comments);
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser) {
+            const comments = yield commentModel_1.default.find({});
+            res.status(200).json(comments);
+        }
+        else {
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -71,9 +83,15 @@ exports.fetchAllComments = fetchAllComments;
 //fetch comment by user id
 const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId } = req.params;
-        const comment = yield commentModel_1.default.find({ userId: userId });
-        res.status(200).json(comment);
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser) {
+            const { userId } = req.params;
+            const comment = yield commentModel_1.default.find({ userId: userId });
+            res.status(200).json(comment);
+        }
+        else {
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -85,17 +103,23 @@ exports.fetchCommentByUser = fetchCommentByUser;
 const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
-        if (checkUser && checkUser.isAdmin) {
-            const { userId } = req.params;
-            const { id } = req.params;
-            const comment = yield commentModel_1.default.updateOne({ userId: userId, _id: id }, req.body);
+        if (checkUser) {
+            const { userId, commentId } = req.params;
+            const { action } = req.body;
+            const comment = yield commentModel_1.default.findById(commentId);
             if (!comment) {
-                return res.status(404).json({ message: `Cannot find any Comment with ID${id} and user ID ${userId}` });
+                return res.status(404).json({ message: 'Comment not found' });
             }
-            res.status(200).json({ comment, message: `Comment deleted` });
+            console.log(comment);
+            // const existingLikeIndex = comment.commentLike.findIndex(like => like.byUser.userId === userId);
+            // const comment = await Comment.updateOne({userId: userId,_id:commentId},req.body);
+            // if(!comment){
+            //     return res.status(404).json({message:`Cannot find any Comment with ID ${commentId} and user ID ${userId}`});
+            // }
+            // res.status(200).json({comment, message:`Comment deleted`});
         }
         else {
-            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE USERS" });
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO LIKE A COMMENT" });
         }
     }
     catch (error) {

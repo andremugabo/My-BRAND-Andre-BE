@@ -64,9 +64,10 @@ exports.default = Blog;
 const joinBlogValidation = (blogEntry) => {
     const schema = joi_1.default.object({
         userId: joi_1.default.string().required(),
-        blogId: joi_1.default.string().required(),
-        blogDescription: joi_1.default.string().min(10).max(100).required(),
-        blogContent: joi_1.default.string().min(500).max(10000).required(),
+        blogTitle: joi_1.default.string().required(),
+        blogCategoryId: joi_1.default.string().required(),
+        blogDescription: joi_1.default.string().min(10).max(500).required(),
+        blogContent: joi_1.default.string().min(10).max(10000).required(),
         blogImg: joi_1.default.string().required(),
         blogDate: joi_1.default.date().timestamp()
     });

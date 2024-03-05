@@ -42,10 +42,18 @@ const commentSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'Comment message is required'],
     },
-    commentLike: {
-        type: Number,
-        default: 0,
-    },
+    commentLike: [{
+            byUser: {
+                userId: {
+                    type: String,
+                    required: true,
+                },
+                like: {
+                    type: Number,
+                    default: 0,
+                }
+            }
+        }],
     commentDate: {
         type: Date,
         default: Date.now
@@ -58,7 +66,12 @@ const joiCommentValidation = (commentEntry) => {
         userId: joi_1.default.string().required(),
         blogId: joi_1.default.string().required(),
         commentMsg: joi_1.default.string().min(3).max(500).required(),
-        commentLike: joi_1.default.number().default(0),
+        commentLike: joi_1.default.array().items(joi_1.default.object({
+            byUser: joi_1.default.object({
+                userId: joi_1.default.string().required(),
+                like: joi_1.default.number().default(0),
+            })
+        })).default([]),
         commentDate: joi_1.default.date().timestamp()
     });
     return schema.validate(commentEntry);

@@ -109,7 +109,7 @@ export const fetchUserById = async(req: express.Request, res: express.Response)=
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser && checkUser.isAdmin){
                 const {id} = req.params;
-                const user = await Users.findById(id);
+                const user = await Users.findById(id,{password:0});
                 res.status(200).json(user);
         }else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO FETCH A USER" });
@@ -122,6 +122,8 @@ export const fetchUserById = async(req: express.Request, res: express.Response)=
 }
 //patch user by id
 export const patchUserById = async(req: express.Request, res: express.Response)=>{
+    console.log("here");
+
     try {
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser && checkUser.isAdmin){
@@ -130,7 +132,7 @@ export const patchUserById = async(req: express.Request, res: express.Response)=
                 if(!user){
                     return res.status(404).json({message:`Cannot find any user with ID${id}`});
                 }
-                res.status(200).json(user);
+                res.status(200).json({user,message:"USERS UPDATED SUCCESSFULLY"});
         } else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO EDIT A USER" });
         }
@@ -151,7 +153,7 @@ export const deleteUserById = async(req: express.Request, res: express.Response)
             if(!user){
                 return res.status(404).json({message:`Can not find any user with ID ${id}`});
             }
-            res.status(500).json(user)
+            res.status(500).json({user,message:"USER DELETED SUCCESSFULLY "})
         } else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A USER" });
         }

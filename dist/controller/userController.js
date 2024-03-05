@@ -128,7 +128,7 @@ const fetchUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser && checkUser.isAdmin) {
             const { id } = req.params;
-            const user = yield usersModel_1.default.findById(id);
+            const user = yield usersModel_1.default.findById(id, { password: 0 });
             res.status(200).json(user);
         }
         else {
@@ -143,6 +143,7 @@ const fetchUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.fetchUserById = fetchUserById;
 //patch user by id
 const patchUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("here");
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser && checkUser.isAdmin) {
@@ -151,7 +152,7 @@ const patchUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             if (!user) {
                 return res.status(404).json({ message: `Cannot find any user with ID${id}` });
             }
-            res.status(200).json(user);
+            res.status(200).json({ user, message: "USERS UPDATED SUCCESSFULLY" });
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO EDIT A USER" });
@@ -173,7 +174,7 @@ const deleteUserById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             if (!user) {
                 return res.status(404).json({ message: `Can not find any user with ID ${id}` });
             }
-            res.status(500).json(user);
+            res.status(500).json({ user, message: "USER DELETED SUCCESSFULLY " });
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A USER" });

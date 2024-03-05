@@ -3,12 +3,13 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import { createUser, fetchUsers, fetchUserById, patchUserById, deleteUserById,login } from './controller/userController';
 import { createCategory,fetchAllCategory,deleteCategory } from './controller/categoryController';
-import { createBlog, fetchBlog, fetchBlogById,fetchBlogByUserIdAndBlogId ,patchBlogById, deleteBlog } from './controller/blogController';
+import { createBlog, fetchBlog, fetchBlogById ,patchBlogById, deleteBlog } from './controller/blogController';
 import { createComment,fetchCommentByUser,fetchAllComments,patchCommentByUserById } from './controller/commentController';
 import { createContactMsg, fetchAllContactMsg, patchContactMsgById } from './controller/contactMsgController';
 import { createLike, fetchAllLike, fetchLikeByUserIdByComment, deleteLikeByUserIdAndCommentId } from './controller/likeController';
 import { verifyToken } from './authentication/verifyToken';
-
+import swaggerUi from 'swagger-ui-express'; 
+import * as swaggerDocument from './swagger.json';
 
 const app = express();
 
@@ -48,11 +49,10 @@ app.delete('/category/:id',  verifyToken, deleteCategory);
 // CREATE A BLOG
 app.post('/blogs',  verifyToken,  createBlog);
 // FETCH ALL BLOG
-app.get('/blogs',   verifyToken,  fetchBlog);
+app.get('/blogs',fetchBlog);
 // FETCH BLOG BY ID
 app.get('/blog/:id',   verifyToken, fetchBlogById);
-//FETCH BLOG BY USER ID AND BLOG ID
-app.get('/blog/:userId/:blogId',   verifyToken, fetchBlogByUserIdAndBlogId);
+
 // UPDATE BLOG BY ID
 app.patch('/blog/:id',   verifyToken, patchBlogById);
 // DELETE BLOG BY ID
@@ -89,7 +89,7 @@ app.get('/like/:userId/:commentId',fetchLikeByUserIdByComment);
 //DELETE LIKE BY USER ID AND COMMENT ID
 app.delete('/like/:userId/:commentId',deleteLikeByUserIdAndCommentId);
 
-
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 mongoose.connect(connection_url)

@@ -14,8 +14,15 @@ export const createComment = async(req:express.Request, res: express.Response)=>
             console.error(error);
             res.status(400).json({ error: error.details[0].message });
         }
-        const comments = await Comment.create(req.body);
-        res.status(200).json(comments);
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser){
+            const comments = await Comment.create(req.body);
+            res.status(200).json(comments);
+        } else{
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });  
+
+        }
+        
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -24,8 +31,14 @@ export const createComment = async(req:express.Request, res: express.Response)=>
 //fetch all comment
 export const fetchAllComments = async(req: express.Request, res: express.Response)=>{
     try {
-        const comments = await Comment.find({});
-        res.status(200).json(comments);
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser){
+            const comments = await Comment.find({});
+            res.status(200).json(comments);
+        } else{
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });  
+        }
+        
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -35,9 +48,15 @@ export const fetchAllComments = async(req: express.Request, res: express.Respons
 //fetch comment by user id
 export const fetchCommentByUser = async(req: express.Request, res: express.Response)=>{
     try {
-        const {userId} = req.params;
-        const comment = await Comment.find({userId:userId});
-        res.status(200).json(comment);
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser){
+            const {userId} = req.params;
+            const comment = await Comment.find({userId:userId});
+            res.status(200).json(comment);
+        } else{
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });  
+        }
+       
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -47,16 +66,26 @@ export const fetchCommentByUser = async(req: express.Request, res: express.Respo
 export const patchCommentByUserById = async(req: express.Request, res: express.Response)=>{
     try {
         const checkUser = await getUser((req as any).myAppToken);
-        if(checkUser && checkUser.isAdmin){
-            const {userId} = req.params;    
-            const {id} = req.params;
-            const comment = await Comment.updateOne({userId: userId,_id:id},req.body);
+        if(checkUser){
+            const {userId,commentId} = req.params;    
+            const {action} = req.body;
+
+            const comment = await Comment.findById(commentId);
             if(!comment){
-                return res.status(404).json({message:`Cannot find any Comment with ID${id} and user ID ${userId}`});
+                return res.status(404).json({ message: 'Comment not found' });
             }
-            res.status(200).json({comment, message:`Comment deleted`});
+            console.log(comment);
+            // const existingLikeIndex = comment.commentLike.findIndex(like => like.byUser.userId === userId);
+
+
+
+            // const comment = await Comment.updateOne({userId: userId,_id:commentId},req.body);
+            // if(!comment){
+            //     return res.status(404).json({message:`Cannot find any Comment with ID ${commentId} and user ID ${userId}`});
+            // }
+            // res.status(200).json({comment, message:`Comment deleted`});
         } else{
-            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE USERS" });  
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO LIKE A COMMENT" });  
         }
         
     } catch (error) {
