@@ -32,8 +32,7 @@ const commentSchema: Schema = new Schema({
     commentLike: [{
         byUser: {
             userId: {
-                type: String,
-                required: true,
+                type: String
             },
             like: {
                 type: Number,
@@ -43,7 +42,7 @@ const commentSchema: Schema = new Schema({
     }],
     commentDate:{
         type:Date,
-        default:Date.now
+        default:Date  
     }
 });
 
@@ -53,14 +52,14 @@ export const joiCommentValidation = (commentEntry: IComment)=>{
     const schema = joi.object({
         userId : joi.string().required(),
         blogId : joi.string().required(),
-        commentMsg: joi.string().min(3).max(500).required(),
+        commentMsg: joi.string().min(3).max(5000).required(),
         commentLike: joi.array().items(joi.object({
             byUser: joi.object({
-                userId: joi.string().required(),
+                userId: joi.string(),
                 like: joi.number().default(0),
             })
         })).default([]),
-        commentDate: joi.date().timestamp()
+        commentDate: joi.date()
     });
      return schema.validate(commentEntry);
 }

@@ -62,7 +62,12 @@ const fetchAllContactMsg = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser && checkUser.isAdmin) {
             const contactMsgs = yield contactMsgModel_1.default.find({});
-            res.status(200).json(contactMsgs);
+            if (contactMsgs.length !== 0) {
+                res.status(200).json(contactMsgs);
+            }
+            else {
+                res.status(404).json({ message: "THERE IS NO MESSAGE TO DISPLAY" });
+            }
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO VIEW MESSAGE" });

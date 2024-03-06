@@ -68,7 +68,12 @@ const fetchAllComments = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
             const comments = yield commentModel_1.default.find({});
-            res.status(200).json(comments);
+            if (comments.length !== 0) {
+                res.status(200).json(comments);
+            }
+            else {
+                res.status(404).json({ message: "THERE IS NO COMMENT TO DISPLAY" });
+            }
         }
         else {
             res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
@@ -87,7 +92,12 @@ const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if (checkUser) {
             const { userId } = req.params;
             const comment = yield commentModel_1.default.find({ userId: userId });
-            res.status(200).json(comment);
+            if (comment.length !== 0) {
+                res.status(200).json(comment);
+            }
+            else {
+                res.status(400).json({ message: "THERE IS NO COMMENT DISPLAY FOR THE GIVEN USER" });
+            }
         }
         else {
             res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
@@ -104,19 +114,14 @@ const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
-            const { userId, commentId } = req.params;
+            const { userId } = req.params;
+            const { commentId } = req.params;
             const { action } = req.body;
-            const comment = yield commentModel_1.default.findById(commentId);
+            const comment = yield commentModel_1.default.findById({ _id: commentId }, req.body);
             if (!comment) {
-                return res.status(404).json({ message: 'Comment not found' });
+                return res.status(404).json({ message: 'Comment not found ' });
             }
             console.log(comment);
-            // const existingLikeIndex = comment.commentLike.findIndex(like => like.byUser.userId === userId);
-            // const comment = await Comment.updateOne({userId: userId,_id:commentId},req.body);
-            // if(!comment){
-            //     return res.status(404).json({message:`Cannot find any Comment with ID ${commentId} and user ID ${userId}`});
-            // }
-            // res.status(200).json({comment, message:`Comment deleted`});
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO LIKE A COMMENT" });

@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 /* USER APIs */
 
 // CREATE A USER
+
 app.post('/users', createUser);
 //LOGIN 
 app.post('/user',login);
@@ -51,16 +52,16 @@ app.delete('/category/:id',  verifyToken, deleteCategory);
 // BLOG APIs
 
 // CREATE A BLOG
-app.post('/blogs',  verifyToken,  createBlog);
+app.post('/createBlogs',  verifyToken,  createBlog);
 // FETCH ALL BLOG
-app.get('/blogs',fetchBlog);
+app.get('/fetchBlogs',fetchBlog);
 // FETCH BLOG BY ID
-app.get('/blog/:id',   verifyToken, fetchBlogById);
+app.get('/fetchBlogById/:id',   verifyToken, fetchBlogById);
 
 // UPDATE BLOG BY ID
-app.patch('/blog/:id',   verifyToken, patchBlogById);
+app.patch('/patchBlogById/:id',   verifyToken, patchBlogById);
 // DELETE BLOG BY ID
-app.delete('/blog/:id',  verifyToken,  deleteBlog);
+app.delete('/deleteBlogById/:id',  verifyToken,  deleteBlog);
 
 // COMMENT APIs
 

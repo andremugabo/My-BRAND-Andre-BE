@@ -32,7 +32,12 @@ export const fetchAllContactMsg = async(req: express.Request, res: express.Respo
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser && checkUser.isAdmin){
             const contactMsgs = await ContactMsg.find({});
-            res.status(200).json(contactMsgs);
+            if(contactMsgs.length !== 0){
+                res.status(200).json(contactMsgs);
+            }else{
+                res.status(404).json({message:"THERE IS NO MESSAGE TO DISPLAY"})
+            }
+            
         } else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO VIEW MESSAGE" });
         }

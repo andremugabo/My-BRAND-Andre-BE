@@ -34,7 +34,12 @@ export const fetchAllComments = async(req: express.Request, res: express.Respons
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser){
             const comments = await Comment.find({});
-            res.status(200).json(comments);
+            if(comments.length !== 0){
+                res.status(200).json(comments);
+            }else{
+                res.status(404).json({message:"THERE IS NO COMMENT TO DISPLAY"})
+            }
+            
         } else{
             res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });  
         }
@@ -52,7 +57,12 @@ export const fetchCommentByUser = async(req: express.Request, res: express.Respo
         if(checkUser){
             const {userId} = req.params;
             const comment = await Comment.find({userId:userId});
-            res.status(200).json(comment);
+            if(comment.length !== 0){
+                res.status(200).json(comment);
+            }else{
+                res.status(400).json({message:"THERE IS NO COMMENT DISPLAY FOR THE GIVEN USER"});
+            }
+            
         } else{
             res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });  
         }
@@ -67,23 +77,16 @@ export const patchCommentByUserById = async(req: express.Request, res: express.R
     try {
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser){
-            const {userId,commentId} = req.params;    
+            const {userId} = req.params;    
+            const {commentId} = req.params;    
             const {action} = req.body;
 
-            const comment = await Comment.findById(commentId);
+            const comment = await Comment.findById({_id:commentId},req.body);
             if(!comment){
-                return res.status(404).json({ message: 'Comment not found' });
+                return res.status(404).json({ message: 'Comment not found ' });
             }
             console.log(comment);
-            // const existingLikeIndex = comment.commentLike.findIndex(like => like.byUser.userId === userId);
-
-
-
-            // const comment = await Comment.updateOne({userId: userId,_id:commentId},req.body);
-            // if(!comment){
-            //     return res.status(404).json({message:`Cannot find any Comment with ID ${commentId} and user ID ${userId}`});
-            // }
-            // res.status(200).json({comment, message:`Comment deleted`});
+           
         } else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO LIKE A COMMENT" });  
         }
