@@ -63,6 +63,11 @@
       },
       "get": {
         "summary": "Fetch all users",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "description": "Retrieves a list of all users",
         "responses": {
           "200": {
@@ -80,6 +85,11 @@
     "/user/{id}": {
       "get": {
         "summary": "Fetch user by ID",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "description": "Retrieves user details by their ID",
         "parameters": [
           {
@@ -107,6 +117,11 @@
       },
       "patch": {
         "summary": "Update user by ID",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "description": "Updates user details by their ID",
         "parameters": [
           {
@@ -137,6 +152,11 @@
       },
       "delete": {
         "summary": "Delete user by ID",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "description": "Deletes user by their ID",
         "parameters": [
           {
