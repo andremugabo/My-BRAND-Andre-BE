@@ -19,7 +19,7 @@ const port: number = 5000;
 const connection_url: string = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
 
 app.get('/', (req, res) => {
-    res.send('Hello World!'); 
+    res.send('MY-BRAND-ANDRE-BE'); 
   });
   
 
