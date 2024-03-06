@@ -20,7 +20,6 @@ const connection_url: string = "mongodb+srv://mugaboandre:NirereNadine1983@clust
 
 /* USER APIs */
 
-app.get('/');
 // CREATE A USER
 app.post('/users', createUser);
 //LOGIN 

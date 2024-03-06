@@ -16,6 +16,7 @@
             "description": "API for user in MY-BRAND-ANDRE-BE"
         }
     ],
+    "basePath": "/",
     "schemes": [
         "http"
     ],
