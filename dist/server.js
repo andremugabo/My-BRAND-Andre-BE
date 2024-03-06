@@ -43,6 +43,7 @@ app.use(body_parser_1.default.json());
 const port = 5000;
 const connection_url = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
 /* USER APIs */
+app.get('/');
 // CREATE A USER
 app.post('/users', userController_1.createUser);
 //LOGIN 
