@@ -17,18 +17,18 @@
     },
     {
       "name": "Category",
-      "description": "API for managing categories"
+      "description": "API for categories in MY-BRAND-ANDRE-BE"
     },
     {
       "name": "Blog",
-      "description": "API for managing blogs"
+      "description": "API for blogs in MY-BRAND-ANDRE-BE"
     }, {
       "name": "Comment",
-      "description": "API for managing comments"
+      "description": "API for comments in MY-BRAND-ANDRE-BE"
     },
     {
       "name": "Contact Message",
-      "description": "API for managing contact messages"
+      "description": "API for contact messages in MY-BRAND-ANDRE-BE"
     }
   ],
   "basePath": "/",
