@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUser = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const usersModel_1 = require("../models/usersModel");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const verifyToken = (req, res, next) => {
     // Get auth header value
     const bearerHeader = req.headers['authorization'];
@@ -41,7 +43,7 @@ const verifyToken = (req, res, next) => {
 exports.verifyToken = verifyToken;
 const getUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, '987654321');
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_DECODE_KEY);
         const user = yield (0, usersModel_1.getUsersById)(decoded.sub);
         if (!user) {
             console.error("User not found");

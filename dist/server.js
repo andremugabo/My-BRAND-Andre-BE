@@ -38,10 +38,12 @@ const likeController_1 = require("./controller/likeController");
 const verifyToken_1 = require("./authentication/verifyToken");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("./swagger.json"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
-const port = 5000;
-const connection_url = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
+const port = process.env.HOST;
+const connection_url = process.env.DB_URL;
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE');
 });

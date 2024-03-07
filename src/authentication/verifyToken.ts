@@ -3,6 +3,8 @@ import express from 'express';
 import  jwt, { VerifyErrors }  from 'jsonwebtoken';
 import Users, { IUsers, getUsersById } from '../models/usersModel';
 import { Document, Types } from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config()
 
 
 //FORMAT OF TOKEN
@@ -46,7 +48,7 @@ interface User {
 
 export const getUser = async (token: string): Promise<IUsers | null> => {
     try {
-        const decoded = jwt.verify(token, '987654321') as { sub: string };
+        const decoded = jwt.verify(token, process.env.JWT_DECODE_KEY!) as { sub: string };
         const user = await getUsersById(decoded.sub);
         
         if (!user) {

@@ -10,13 +10,17 @@ import { createLike, fetchAllLike, fetchLikeByUserIdByComment, deleteLikeByUserI
 import { verifyToken } from './authentication/verifyToken';
 import swaggerUi from 'swagger-ui-express'; 
 import * as swaggerDocument from './swagger.json';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 
 const app = express();
 
 app.use(bodyParser.json());
 
-const port: number = 5000;
-const connection_url: string = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
+const port: number | string = process.env.HOST as string | number;
+const connection_url: string = process.env.DB_URL!;
 
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE'); 
