@@ -40,8 +40,8 @@ const bcrypt_1 = __importDefault(require("bcrypt")); // Import bcrypt library
 const usersModel_1 = __importStar(require("../models/usersModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const verifyToken_1 = require("../authentication/verifyToken");
-// import dotenv from 'dotenv';
-// dotenv.config();
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 // Create user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -95,7 +95,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const payload = {
             sub: loginUser.id,
         };
-        const token = jsonwebtoken_1.default.sign(payload, '987654321', { expiresIn: '1h' });
+        const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_DECODE_KEY, { expiresIn: '1h' });
         res.status(200).json({ token });
     }
     catch (error) {

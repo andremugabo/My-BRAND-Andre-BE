@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'; // Import bcrypt library
 import Users, { joiUserValidation,IUsers } from '../models/usersModel';
 import jsonwebtoken from 'jsonwebtoken';
 import { getUser } from '../authentication/verifyToken';
-// import dotenv from 'dotenv';
-// dotenv.config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 
@@ -76,7 +76,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
             const payload = {
                 sub: loginUser.id,
             }
-            const token = jsonwebtoken.sign(payload, '987654321', {expiresIn:'1h'});
+            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'1h'});
             res.status(200).json({token})
 
 
