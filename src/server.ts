@@ -23,7 +23,7 @@ const port: number | string = process.env.HOST as string | number || 5000;
 const connection_url: string = process.env.DB_URL!;
 
 app.get('/', (req, res) => {
-    res.send('MY-BRAND-ANDRE-BE'); 
+    res.send('MY-BRAND-ANDRE-BE');   
   });
   
 
@@ -74,9 +74,9 @@ app.post('/comments',   verifyToken, createComment);
 //FETCH ALL COMMENT
 app.get('/comments',  verifyToken, fetchAllComments);
 //FETCH COMMENT BY USER
-app.get('/comment/:userId',  verifyToken, fetchCommentByUser);
+app.get('/comment/:userId',  verifyToken, fetchCommentByUser); 
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/comment/:userId/:id',  verifyToken, patchCommentByUserById);
+app.patch('/commentLike/:id',  verifyToken, patchCommentByUserById);
 
 // MESSAGE APIs
 
@@ -89,14 +89,7 @@ app.patch('/readMsg/:id',  verifyToken, patchContactMsgById);
 
 // LIKE APIs
 
-//CREATE A LIKE
-app.post('/likes',createLike);
-//FETCH ALL LIKE
-app.get('/likes',fetchAllLike);
-//FETCH LIKE BY USER userID AND COMMENT ID
-app.get('/like/:userId/:commentId',fetchLikeByUserIdByComment);
-//DELETE LIKE BY USER ID AND COMMENT ID
-app.delete('/like/:userId/:commentId',deleteLikeByUserIdAndCommentId);
+
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -119,3 +112,5 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 app.use(errorHandler);
+
+export default app;

@@ -52,7 +52,7 @@ export const joinBlogValidation = (blogEntry : IBlog)=>{
         blogDescription: joi.string().min(10).max(500).required(),
         blogContent : joi.string().min(10).max(10000).required(), 
         blogImg: joi.string().required(),  
-        blogDate: joi.date().timestamp() 
+        blogDate: joi.date() 
     });
     return schema.validate(blogEntry);
 }

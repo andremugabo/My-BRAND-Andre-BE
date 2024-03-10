@@ -43,17 +43,14 @@ const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (error) {
             console.error(error);
             res.status(400).json({ error: error.details[0].message });
+            return;
         }
         // console.log(user)
         if (user && user.isAdmin) {
             // Create the blog
             blogModel_1.default.create(req.body)
                 .then(blog => {
-                res.status(200).json({ blog, user, message: "Blog Created" });
-            })
-                .catch(error => {
-                console.log(error.message);
-                res.status(500).json({ message: error.message });
+                res.status(200).json({ blog, message: "Blog Created" });
             });
         }
         else {

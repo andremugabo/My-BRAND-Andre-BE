@@ -69,7 +69,7 @@ const joinBlogValidation = (blogEntry) => {
         blogDescription: joi_1.default.string().min(10).max(500).required(),
         blogContent: joi_1.default.string().min(10).max(10000).required(),
         blogImg: joi_1.default.string().required(),
-        blogDate: joi_1.default.date().timestamp()
+        blogDate: joi_1.default.date()
     });
     return schema.validate(blogEntry);
 };

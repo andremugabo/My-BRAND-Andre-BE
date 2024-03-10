@@ -91,6 +91,7 @@ const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
             const { userId } = req.params;
+            console.log(userId);
             const comment = yield commentModel_1.default.find({ userId: userId });
             if (comment.length !== 0) {
                 res.status(200).json(comment);
@@ -114,22 +115,25 @@ const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
-            const { userId } = req.params;
+            const userId = checkUser._id;
             const { commentId } = req.params;
             const { action } = req.body;
-            const comment = yield commentModel_1.default.findById({ _id: commentId }, req.body);
-            if (!comment) {
-                return res.status(404).json({ message: 'Comment not found ' });
+            console.log(commentId);
+            const checkIfCommentExist = yield commentModel_1.default.findById({ commentId });
+            console.log(checkIfCommentExist);
+            const comment = yield commentModel_1.default.findOneAndUpdate({ userId, _id: commentId }, action, { new: true });
+            if (comment) {
+                return res.status(404).json({ message: 'Comment not found' });
             }
-            console.log(comment);
+            return res.status(200).json({ message: 'Comment updated successfully', comment });
         }
         else {
-            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO LIKE A COMMENT" });
+            res.status(401).json({ message: 'You are not authorized to update this comment' });
         }
     }
     catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 exports.patchCommentByUserById = patchCommentByUserById;

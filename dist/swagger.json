@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "my-brand-andre-be.onrender.com",
+    "host": "localhost:5000",
     "tags": [
         {
             "name": "User",
@@ -598,7 +598,7 @@
                 }
             }
         },
-        "/commentLike/{userId}/{id}": {
+        "/commentLike/{id}": {
             "patch": {
                 "tags": ["Comment"],
                 "summary": "Update comment by user ID and comment ID",
@@ -610,16 +610,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": "userId",
+                        "name": "Comment Id",
                         "in": "path",
-                        "description": "ID of logged user who is going to like",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the comment to like",
+                        "description": "Id of a comment to like",
                         "required": true,
                         "type": "string"
                     },

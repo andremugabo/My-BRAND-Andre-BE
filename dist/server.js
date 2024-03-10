@@ -34,7 +34,6 @@ const categoryController_1 = require("./controller/categoryController");
 const blogController_1 = require("./controller/blogController");
 const commentController_1 = require("./controller/commentController");
 const contactMsgController_1 = require("./controller/contactMsgController");
-const likeController_1 = require("./controller/likeController");
 const verifyToken_1 = require("./authentication/verifyToken");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("./swagger.json"));
@@ -86,7 +85,7 @@ app.get('/comments', verifyToken_1.verifyToken, commentController_1.fetchAllComm
 //FETCH COMMENT BY USER
 app.get('/comment/:userId', verifyToken_1.verifyToken, commentController_1.fetchCommentByUser);
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/comment/:userId/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
+app.patch('/commentLike/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
 // MESSAGE APIs
 //CREATE A CONTACT MESSAGE
 app.post('/contactMsgs', contactMsgController_1.createContactMsg);
@@ -95,14 +94,6 @@ app.get('/contactMsgs', verifyToken_1.verifyToken, contactMsgController_1.fetchA
 //PATCH CONTACT MSG
 app.patch('/readMsg/:id', verifyToken_1.verifyToken, contactMsgController_1.patchContactMsgById);
 // LIKE APIs
-//CREATE A LIKE
-app.post('/likes', likeController_1.createLike);
-//FETCH ALL LIKE
-app.get('/likes', likeController_1.fetchAllLike);
-//FETCH LIKE BY USER userID AND COMMENT ID
-app.get('/like/:userId/:commentId', likeController_1.fetchLikeByUserIdByComment);
-//DELETE LIKE BY USER ID AND COMMENT ID
-app.delete('/like/:userId/:commentId', likeController_1.deleteLikeByUserIdAndCommentId);
 app.use('/swagger', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 mongoose_1.default.connect(connection_url)
     .then(() => {
@@ -120,3 +111,4 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).send('Something went wrong!');
 };
 app.use(errorHandler);
+exports.default = app;

@@ -12,18 +12,15 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
         if(error){
             console.error(error);
             res.status(400).json({ error: error.details[0].message });
+            return;
         }
         // console.log(user)
         if (user && user.isAdmin) { 
             // Create the blog
             Blog.create(req.body)
                 .then(blog => {
-                    res.status(200).json({ blog, user, message: "Blog Created" });
+                    res.status(200).json({blog,message: "Blog Created" });
                 })
-                .catch(error => {
-                    console.log((error as Error).message);
-                    res.status(500).json({ message: (error as Error).message });
-                });
         } else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED. ONLY ADMIN CAN POST BLOGS" });
         }
