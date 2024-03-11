@@ -6,7 +6,6 @@ import { createCategory,fetchAllCategory,deleteCategory } from './controller/cat
 import { createBlog, fetchBlog, fetchBlogById ,patchBlogById, deleteBlog } from './controller/blogController';
 import { createComment,fetchCommentByUser,fetchAllComments,patchCommentByUserById } from './controller/commentController';
 import { createContactMsg, fetchAllContactMsg, patchContactMsgById } from './controller/contactMsgController';
-import { createLike, fetchAllLike, fetchLikeByUserIdByComment, deleteLikeByUserIdAndCommentId } from './controller/likeController';
 import { verifyToken } from './authentication/verifyToken';
 import swaggerUi from 'swagger-ui-express'; 
 import * as swaggerDocument from './swagger.json';
@@ -19,7 +18,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const port: number | string = process.env.HOST as string | number || 5000;
+const port: number | string = process.env.HOST as string | number || 4000;
 const connection_url: string = process.env.DB_URL!;
 
 app.get('/', (req, res) => {
