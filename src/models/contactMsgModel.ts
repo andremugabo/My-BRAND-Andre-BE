@@ -1,4 +1,5 @@
 import mongoose, {Schema,Document} from "mongoose";
+import joi from 'joi';
 
 export interface IContactMsg extends Document{
     name:string;
@@ -29,3 +30,13 @@ const contactMsgSchema: Schema = new Schema({
 
 const ContactMsg = mongoose.model<IContactMsg>('ContactMsg',contactMsgSchema);
 export default ContactMsg;
+export const joiContactMsg = (contactMsgEntry:IContactMsg)=>{
+    const schema = joi.object({
+        name : joi.string().required(),
+        email:joi.string().email({minDomainSegments:2,tlds:{allow:['com','net']}}).required(),
+        msg: joi.string().min(10).max(1000).required(),
+        read: joi.string().valid('1', '0').default('0')
+    })
+    return schema.validate(contactMsgEntry);
+}
+

@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -11,69 +34,67 @@ const categoryController_1 = require("./controller/categoryController");
 const blogController_1 = require("./controller/blogController");
 const commentController_1 = require("./controller/commentController");
 const contactMsgController_1 = require("./controller/contactMsgController");
-const likeController_1 = require("./controller/likeController");
+const verifyToken_1 = require("./authentication/verifyToken");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swaggerDocument = __importStar(require("./swagger.json"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
-const port = 5000;
-const connection_url = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
+const port = process.env.HOST || 4000;
+const connection_url = process.env.DB_URL;
+app.get('/', (req, res) => {
+    res.send('MY-BRAND-ANDRE-BE');
+});
 /* USER APIs */
 // CREATE A USER
 app.post('/users', userController_1.createUser);
 //LOGIN 
 app.post('/user', userController_1.login);
 // FETCH ALL USER
-app.get('/users', userController_1.fetchUsers);
+app.get('/users', verifyToken_1.verifyToken, userController_1.fetchUsers);
 // FETCH USERS BY ID
-app.get('/user/:id', userController_1.fetchUserById);
+app.get('/user/:id', verifyToken_1.verifyToken, userController_1.fetchUserById);
 // UPDATE USER BY ID
-app.patch('/user/:id', userController_1.patchUserById);
+app.patch('/user/:id', verifyToken_1.verifyToken, userController_1.patchUserById);
 // DELETE USER BY ID
-app.delete('/user/:id', userController_1.deleteUserById);
+app.delete('/user/:id', verifyToken_1.verifyToken, userController_1.deleteUserById);
 // CATEGORY APIs
 //CREATE A CATEGORY
-app.post('/category', categoryController_1.createCategory);
+app.post('/category', verifyToken_1.verifyToken, categoryController_1.createCategory);
 //FETCH ALL CATEGORY
-app.get('/categories', categoryController_1.fetchAllCategory);
+app.get('/categories', verifyToken_1.verifyToken, categoryController_1.fetchAllCategory);
 //DELETE CATEGORY BY ID
-app.delete('/category/:id', categoryController_1.deleteCategory);
+app.delete('/category/:id', verifyToken_1.verifyToken, categoryController_1.deleteCategory);
 // BLOG APIs
 // CREATE A BLOG
-app.post('/blogs', blogController_1.createBlog);
+app.post('/createBlogs', verifyToken_1.verifyToken, blogController_1.createBlog);
 // FETCH ALL BLOG
-app.get('/blogs', blogController_1.fetchBlog);
+app.get('/fetchBlogs', blogController_1.fetchBlog);
 // FETCH BLOG BY ID
-app.get('/blog/:id', blogController_1.fetchBlogById);
-//FETCH BLOG BY USER ID AND BLOG ID
-app.get('/blog/:u_id/:b_id', blogController_1.fetchBlogByUserIdAndBlogId);
+app.get('/fetchBlogById/:id', verifyToken_1.verifyToken, blogController_1.fetchBlogById);
 // UPDATE BLOG BY ID
-app.patch('/blog/:id', blogController_1.patchBlogById);
+app.patch('/patchBlogById/:id', verifyToken_1.verifyToken, blogController_1.patchBlogById);
 // DELETE BLOG BY ID
-app.delete('/blog/:id', blogController_1.deleteBlog);
+app.delete('/deleteBlogById/:id', verifyToken_1.verifyToken, blogController_1.deleteBlog);
 // COMMENT APIs
 //CREATE A COMMENT
-app.post('/comments', commentController_1.createComment);
+app.post('/comments', verifyToken_1.verifyToken, commentController_1.createComment);
 //FETCH ALL COMMENT
-app.get('/comments', commentController_1.fetchAllComments);
+app.get('/comments', verifyToken_1.verifyToken, commentController_1.fetchAllComments);
 //FETCH COMMENT BY USER
-app.get('/comment/:u_id', commentController_1.fetchCommentByUser);
+app.get('/comment/:userId', verifyToken_1.verifyToken, commentController_1.fetchCommentByUser);
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/comment/:u_id/:id', commentController_1.patchCommentByUserById);
+app.patch('/commentLike/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
 // MESSAGE APIs
 //CREATE A CONTACT MESSAGE
 app.post('/contactMsgs', contactMsgController_1.createContactMsg);
 //FETCH ALL CONTACT MSG
-app.get('/contactMsgs', contactMsgController_1.fetchAllContactMsg);
+app.get('/contactMsgs', verifyToken_1.verifyToken, contactMsgController_1.fetchAllContactMsg);
 //PATCH CONTACT MSG
-app.patch('/readMsg/:id', contactMsgController_1.patchContactMsgById);
+app.patch('/readMsg/:id', verifyToken_1.verifyToken, contactMsgController_1.patchContactMsgById);
 // LIKE APIs
-//CREATE A LIKE
-app.post('/likes', likeController_1.createLike);
-//FETCH ALL LIKE
-app.get('/likes', likeController_1.fetchAllLike);
-//FETCH LIKE BY USER U_ID AND COMMENT ID
-app.get('/like/:u_id/:c_id', likeController_1.fetchLikeByUserIdByComment);
-//DELETE LIKE BY USER ID AND COMMENT ID
-app.delete('/like/:u_id/:c_id', likeController_1.deleteLikeByUserIdAndCommentId);
+app.use('/swagger', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 mongoose_1.default.connect(connection_url)
     .then(() => {
     console.log('Connected to MongoDB');
@@ -90,3 +111,4 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).send('Something went wrong!');
 };
 app.use(errorHandler);
+exports.default = app;

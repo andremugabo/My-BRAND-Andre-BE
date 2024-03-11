@@ -22,30 +22,51 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserById = exports.deleteUserById = exports.createUser = exports.getUsersById = exports.getUsersByEmail = exports.getUsers = void 0;
+exports.updateUserById = exports.deleteUserById = exports.createUser = exports.getUsersById = exports.getUsersByEmail = exports.getUsers = exports.joiUserValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const joi_1 = __importDefault(require("joi"));
 const userSchema = new mongoose_1.Schema({
-    u_fullName: {
+    FullName: {
         type: String,
         required: [true, 'Please enter your fullName']
     },
-    u_email: {
+    email: {
         type: String,
-        required: [true, 'Please enter your email']
+        required: [true, 'Please enter your email'],
+        unique: true
     },
-    u_password: {
+    password: {
         type: String,
         required: [true, "Please enter your password"]
     },
-    u_pic: {
+    picture: {
         type: String,
     },
-    u_desc: {
+    description: {
         type: String,
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+        required: false
     }
 });
 const Users = mongoose_1.default.model('Users', userSchema);
+const joiUserValidation = (userEntry) => {
+    const schema = joi_1.default.object({
+        FullName: joi_1.default.string().min(3).max(30).required(),
+        email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        password: joi_1.default.string().required(),
+        picture: joi_1.default.string().optional(),
+        isAdmin: joi_1.default.boolean().optional()
+    });
+    return schema.validate(userEntry);
+};
+exports.joiUserValidation = joiUserValidation;
 exports.default = Users;
 const getUsers = () => Users.find();
 exports.getUsers = getUsers;

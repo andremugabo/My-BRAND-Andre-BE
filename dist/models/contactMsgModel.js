@@ -22,8 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.joiContactMsg = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const joi_1 = __importDefault(require("joi"));
 const contactMsgSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -45,3 +50,13 @@ const contactMsgSchema = new mongoose_1.Schema({
 });
 const ContactMsg = mongoose_1.default.model('ContactMsg', contactMsgSchema);
 exports.default = ContactMsg;
+const joiContactMsg = (contactMsgEntry) => {
+    const schema = joi_1.default.object({
+        name: joi_1.default.string().required(),
+        email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        msg: joi_1.default.string().min(10).max(1000).required(),
+        read: joi_1.default.string().valid('1', '0').default('0')
+    });
+    return schema.validate(contactMsgEntry);
+};
+exports.joiContactMsg = joiContactMsg;

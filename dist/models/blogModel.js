@@ -22,36 +22,55 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.joinBlogValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const joi_1 = __importDefault(require("joi"));
 const blogSchema = new mongoose_1.Schema({
-    u_id: {
+    userId: {
         type: String,
         required: [true],
     },
-    bc_id: {
+    blogCategoryId: {
         type: String,
         required: [true]
     },
-    b_title: {
+    blogTitle: {
         type: String,
         required: [true, 'Blog title is required'],
     },
-    b_description: {
+    blogDescription: {
         type: String,
         required: [true, 'Blog description is required'],
     },
-    b_content: {
+    blogContent: {
         type: String,
         required: [true, 'Blog content is required'],
     },
-    b_img: {
+    blogImg: {
         type: String,
         required: [true, 'Blog image is required'],
     },
-    b_date: {
-        type: String,
+    blogDate: {
+        type: Date,
+        default: Date.now
     }
 });
 const Blog = mongoose_1.default.model('Blog', blogSchema);
 exports.default = Blog;
+const joinBlogValidation = (blogEntry) => {
+    const schema = joi_1.default.object({
+        userId: joi_1.default.string().required(),
+        blogTitle: joi_1.default.string().required(),
+        blogCategoryId: joi_1.default.string().required(),
+        blogDescription: joi_1.default.string().min(10).max(500).required(),
+        blogContent: joi_1.default.string().min(10).max(10000).required(),
+        blogImg: joi_1.default.string().required(),
+        blogDate: joi_1.default.date()
+    });
+    return schema.validate(blogEntry);
+};
+exports.joinBlogValidation = joinBlogValidation;

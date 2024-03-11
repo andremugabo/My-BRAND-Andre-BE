@@ -38,14 +38,14 @@ const fetchAllLike = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.fetchAllLike = fetchAllLike;
-//fetch like by user u_id and Comment ID
+//fetch like by user userId and Comment ID
 const fetchLikeByUserIdByComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_id } = req.params;
-        const { c_id } = req.params;
-        const like = yield likeModel_1.default.find({ u_id: u_id, c_id: c_id });
+        const { userId } = req.params;
+        const { commentId } = req.params;
+        const like = yield likeModel_1.default.find({ userId: userId, commentId: commentId });
         if (!like) {
-            return res.status(404).json({ message: `Cannot find a comment with a user ID ${u_id} and Comment ID ${c_id}` });
+            return res.status(404).json({ message: `Cannot find a comment with a user ID ${userId} and Comment ID ${commentId}` });
         }
         res.status(200).json(like);
     }
@@ -58,9 +58,9 @@ exports.fetchLikeByUserIdByComment = fetchLikeByUserIdByComment;
 //delete like by user id and comment id
 const deleteLikeByUserIdAndCommentId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { u_id } = req.params;
-        const { c_id } = req.params;
-        const like = yield likeModel_1.default.deleteOne({ u_id: u_id, c_id: c_id }, req.body);
+        const { userId } = req.params;
+        const { commentId } = req.params;
+        const like = yield likeModel_1.default.deleteOne({ userId: userId, commentId: commentId }, req.body);
         if (!like) {
             return res.status(404).json({ message: 'Like not found for the specified userID and commentID' });
         }

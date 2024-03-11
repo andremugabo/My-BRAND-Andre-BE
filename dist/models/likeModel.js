@@ -25,11 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const like = new mongoose_1.Schema({
-    u_id: {
+    userId: {
         type: String,
         required: [true, 'Please user id is required']
     },
-    c_id: {
+    commentId: {
         type: String,
         required: [true, 'Please Comment id is required']
     }

@@ -24,14 +24,14 @@ export const fetchAllLike = async(req: express.Request, res: express.Response)=>
     }
 }
 
-//fetch like by user u_id and Comment ID
+//fetch like by user userId and Comment ID
 export const fetchLikeByUserIdByComment = async(req: express.Request, res: express.Response)=>{
     try {
-        const {u_id} = req.params;
-        const {c_id} = req.params;
-        const like = await Like.find({u_id:u_id,c_id:c_id});
+        const {userId} = req.params;
+        const {commentId} = req.params;
+        const like = await Like.find({userId:userId,commentId:commentId});
         if(!like){
-            return res.status(404).json({message:`Cannot find a comment with a user ID ${u_id} and Comment ID ${c_id}`})
+            return res.status(404).json({message:`Cannot find a comment with a user ID ${userId} and Comment ID ${commentId}`})
         }
         res.status(200).json(like);
     } catch (error) {
@@ -43,9 +43,9 @@ export const fetchLikeByUserIdByComment = async(req: express.Request, res: expre
 //delete like by user id and comment id
 export const deleteLikeByUserIdAndCommentId = async(req: express.Request, res: express.Response)=>{
     try {
-        const {u_id} = req.params;
-        const {c_id} = req.params;
-        const like = await Like.deleteOne({u_id: u_id, c_id: c_id},req.body);
+        const {userId} = req.params;
+        const {commentId} = req.params;
+        const like = await Like.deleteOne({userId: userId, commentId: commentId},req.body);
         if(!like){
             return res.status(404).json({message:'Like not found for the specified userID and commentID'});
         }

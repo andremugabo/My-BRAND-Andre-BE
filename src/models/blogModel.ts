@@ -1,44 +1,58 @@
 import mongoose,{Schema, Document} from "mongoose";
+import joi from 'joi';
 
 export interface IBlog extends Document{
-    u_id :string;
-    bc_id:string;
-    b_title: string;
-    b_description:string;
-    b_content:string;
-    b_img: string;
-    b_date: string;
+    userId :string;
+    blogCategoryId:string;
+    blogTitle: string;
+    blogDescription:string;
+    blogContent:string;
+    blogImg: string;
+    blogDate: Date;
 }
 
 const blogSchema : Schema = new Schema({
-    u_id:{
+    userId:{
         type:String,
         required:[true],
     },
-    bc_id:{
+    blogCategoryId:{
         type:String,
         required:[true]
     },
-    b_title:{
+    blogTitle:{
         type:String,
         required:[true,'Blog title is required'],
     },
-    b_description:{
+    blogDescription:{
         type:String,
         required:[true,'Blog description is required'],
     },
-    b_content:{
+    blogContent:{
         type:String,
         required:[true,'Blog content is required'],
     },
-    b_img:{
+    blogImg:{
         type:String,
         required:[true,'Blog image is required'],
     },
-    b_date:{
-        type:String,
+    blogDate:{
+        type:Date,
+        default: Date.now
     }
 });
 
 const Blog = mongoose.model<IBlog>('Blog',blogSchema);
 export default Blog;
+export const joinBlogValidation = (blogEntry : IBlog)=>{
+    const schema = joi.object({
+        userId : joi.string().required(),
+        blogTitle:joi.string().required(),
+        blogCategoryId: joi.string().required(),
+        blogDescription: joi.string().min(10).max(500).required(),
+        blogContent : joi.string().min(10).max(10000).required(), 
+        blogImg: joi.string().required(),  
+        blogDate: joi.date() 
+    });
+    return schema.validate(blogEntry);
+}

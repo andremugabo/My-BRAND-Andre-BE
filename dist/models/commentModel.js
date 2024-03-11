@@ -22,28 +22,57 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.joiCommentValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const joi_1 = __importDefault(require("joi"));
 const commentSchema = new mongoose_1.Schema({
-    u_id: {
+    userId: {
         type: String,
         required: [true],
     },
-    b_id: {
+    blogId: {
         type: String,
         required: true,
     },
-    c_msg: {
+    commentMsg: {
         type: String,
         required: [true, 'Comment message is required'],
     },
-    c_like: {
-        type: Number,
-        default: 0,
-    },
-    c_date: {
-        type: String,
+    commentLike: [{
+            byUser: {
+                userId: {
+                    type: String
+                },
+                like: {
+                    type: Number,
+                    default: 0,
+                }
+            }
+        }],
+    commentDate: {
+        type: Date,
+        default: Date
     }
 });
 const Comment = mongoose_1.default.model('Comment', commentSchema);
 exports.default = Comment;
+const joiCommentValidation = (commentEntry) => {
+    const schema = joi_1.default.object({
+        userId: joi_1.default.string().required(),
+        blogId: joi_1.default.string().required(),
+        commentMsg: joi_1.default.string().min(3).max(5000).required(),
+        commentLike: joi_1.default.array().items(joi_1.default.object({
+            byUser: joi_1.default.object({
+                userId: joi_1.default.string(),
+                like: joi_1.default.number().default(0),
+            })
+        })).default([]),
+        commentDate: joi_1.default.date()
+    });
+    return schema.validate(commentEntry);
+};
+exports.joiCommentValidation = joiCommentValidation;

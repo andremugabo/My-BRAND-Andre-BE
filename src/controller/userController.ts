@@ -1,33 +1,48 @@
 import express from 'express';
 import bcrypt from 'bcrypt'; // Import bcrypt library
-import Users, { IUsers } from '../models/usersModel';
+import Users, { joiUserValidation,IUsers } from '../models/usersModel';
 import jsonwebtoken from 'jsonwebtoken';
+import { getUser } from '../authentication/verifyToken';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+
 
 // Create user
 export const createUser = async (req: express.Request, res: express.Response) => {
     try {
-        const { u_fullName, u_email, u_password } = req.body;
 
+
+        const { FullName, email, password, isAdmin } = req.body;
         // Validate required fields
-        if (!u_fullName || !u_email || !u_password) {
-            return res.status(400).json({ message: "Please provide all information!" });
+        if (!FullName || !email || !password) {
+            return res.status(400).json({ message: "Please provide all required information to create a user!" });
         }
 
+        const {error} = joiUserValidation(req.body);
+
+        if(error){
+            console.error(error);
+            res.status(400).json({ error: error.details[0].message });
+        }
+
+
         // Check if email already exists
-        const checkIfEmailExist = await Users.findOne({u_email});
+        const checkIfEmailExist = await Users.findOne({email});
         if (checkIfEmailExist) {
-            console.log("here");
-            return res.status(400).json({ message: "Email already exists!" });
+            return res.status(400).json({ message: "A user is registered with the same email, Try another email, or Login " });
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(u_password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create user with hashed password
         const user = await Users.create({
-            u_fullName,
-            u_email,
-            u_password: hashedPassword 
+            FullName,
+            email,
+            password: hashedPassword,
+            isAdmin
         });
 
         res.status(200).json(user);
@@ -37,30 +52,34 @@ export const createUser = async (req: express.Request, res: express.Response) =>
     }
 };
 
-// Login 
+// Login
 
 export const login = async(req: express.Request, res:express.Response)=>{
         try {
-            const {u_email, u_password} = req.body;
+            const {email, password} = req.body;
 
-            if(!u_email || !u_password){
+            if(!email || !password){
                 res.status(400).json({message:"Please Provide your Email and Password"});
             }
 
-            const loginUser = await Users.findOne({u_email});
+            const loginUser = await Users.findOne({email});
             if(!loginUser){
                 return res.status(400).json({message:"Your are not registered !!!"});
             }
 
-            const checkPassword = await bcrypt.compare(u_password, loginUser.u_password);
+            const checkPassword = await bcrypt.compare(password, loginUser.password);
             if(!checkPassword){
                 return res.status(400).json({message:"Incorrect password !!"});
             }
 
-            const token = jsonwebtoken.sign({id: loginUser._id},'654321',{expiresIn:'1h'});
+
+            const payload = {
+                sub: loginUser.id,
+            }
+            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'1h'});
             res.status(200).json({token})
 
-            
+
         } catch (error) {
             console.log((error as Error).message);
             res.status(500).json({ message: "Internal server error" });
@@ -70,8 +89,14 @@ export const login = async(req: express.Request, res:express.Response)=>{
 //fetch all user
 export const fetchUsers = async(req: express.Request, res: express.Response)=>{
     try {
-        const users = await Users.find({});
-        res.status(200).json(users);
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser && checkUser.isAdmin){
+            const users = await Users.find({}, { password: 0 });
+            res.status(200).json(users);
+        }else{
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO FETCH USERS" });
+        }
+
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -81,9 +106,15 @@ export const fetchUsers = async(req: express.Request, res: express.Response)=>{
 //fetch user by id
 export const fetchUserById = async(req: express.Request, res: express.Response)=>{
     try {
-        const {id} = req.params;
-        const user = await Users.findById(id);
-        res.status(200).json(user);
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser && checkUser.isAdmin){
+                const {id} = req.params;
+                const user = await Users.findById(id,{password:0});
+                res.status(200).json(user);
+        }else{
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO FETCH A USER" });
+        }
+
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -91,13 +122,21 @@ export const fetchUserById = async(req: express.Request, res: express.Response)=
 }
 //patch user by id
 export const patchUserById = async(req: express.Request, res: express.Response)=>{
+    console.log("here");
+
     try {
-        const {id} = req.params;
-        const user = await Users.updateOne({_id:id},req.body);
-        if(!user){
-            return res.status(404).json({message:`Cannot find any user with ID${id}`});
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser && checkUser.isAdmin){
+                const {id} = req.params;
+                const user = await Users.updateOne({_id:id},req.body);
+                if(!user){
+                    return res.status(404).json({message:`Cannot find any user with ID${id}`});
+                }
+                res.status(200).json({user,message:"USERS UPDATED SUCCESSFULLY"});
+        } else{
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO EDIT A USER" });
         }
-        res.status(200).json(user);
+
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});
@@ -107,12 +146,18 @@ export const patchUserById = async(req: express.Request, res: express.Response)=
 //delete user by id
 export const deleteUserById = async(req: express.Request, res: express.Response)=>{
     try {
-        const {id} = req.params;
-        const user = await Users.deleteOne({_id:id});
-        if(!user){
-            return res.status(404).json({message:`Can not find any user with ID ${id}`});
+        const checkUser = await getUser((req as any).myAppToken);
+        if(checkUser && checkUser.isAdmin){
+            const {id} = req.params;
+            const user = await Users.deleteOne({_id:id});
+            if(!user){
+                return res.status(404).json({message:`Can not find any user with ID ${id}`});
+            }
+            res.status(500).json({user,message:"USER DELETED SUCCESSFULLY "})
+        } else{
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A USER" });
         }
-        res.status(500).json(user)
+
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({message:(error as Error).message});

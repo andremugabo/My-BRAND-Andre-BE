@@ -1,33 +1,51 @@
-import mongoose,{Schema,Document} from "mongoose";
+import mongoose,{Schema,Document, SchemaTypes} from "mongoose";
+import joi from 'joi';
 export interface IUsers extends Document{
-    u_fullName: string;
-    u_email:string;
-    u_password:string;
-    u_pic:string;
-    u_desc:string;
+    FullName: string;
+    email:string;
+    password:string;
+    picture:string;
+    description:string;
+    isAdmin: boolean;
 }
 
 const userSchema: Schema = new Schema({
-    u_fullName :{
+    FullName :{
         type:String,
         required:[true,'Please enter your fullName']
     },
-    u_email:{
+    email:{
         type:String,
-        required:[true,'Please enter your email']
+        required:[true,'Please enter your email'],
+        unique:true
     },
-    u_password:{
+    password:{
         type:String,
         required:[true,"Please enter your password"]
     },
-    u_pic:{
+    picture:{
         type:String,
     },
-    u_desc:{
+    description:{
         type:String,
+    },
+    isAdmin: {
+        type: Boolean,
+        default:false,
+        required:false
     }
 });
 const Users = mongoose.model<IUsers>('Users',userSchema);
+export const joiUserValidation = (userEntry: IUsers)=>{
+    const schema = joi.object({
+        FullName :joi.string().min(3).max(30).required(),
+        email:joi.string().email({minDomainSegments:2,tlds:{allow:['com','net']}}).required(),
+        password:joi.string().required(),
+        picture:joi.string().optional(),
+        isAdmin:joi.boolean().optional()
+    });
+    return schema.validate(userEntry);
+}
 export default Users;
 export const getUsers = ()=>Users.find();
 export const getUsersByEmail = (email:string)=>Users.findOne({email});

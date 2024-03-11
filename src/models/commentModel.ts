@@ -1,34 +1,65 @@
 import mongoose, {Schema, Document} from "mongoose";
+import joi from 'joi';
 
 export interface IComment extends Document{
-    u_id:string;
-    b_id:string;
-    c_msg:string;
-    c_like:number;
-    c_date:string;
+    userId:string;
+    blogId:string;
+    commentMsg:string;
+    commentLike:[
+         byUser:{
+            userId:string,
+            like:number
+        }
+    ]
+       
+    
+    commentDate:string;
 }
 
 const commentSchema: Schema = new Schema({
-    u_id:{
+    userId:{
         type:String,
         required:[true],
     },
-    b_id:{
+    blogId:{
         type:String,
         required:true,
     },
-    c_msg:{
+    commentMsg:{
         type:String,
         required:[true,'Comment message is required'],
     },
-    c_like:{ 
-        type:Number,
-        default:0,
-    },
-    c_date:{
-        type:String,
+    commentLike: [{
+        byUser: {
+            userId: {
+                type: String
+            },
+            like: {
+                type: Number,
+                default: 0,
+            }
+        }
+    }],
+    commentDate:{
+        type:Date,
+        default:Date  
     }
 });
 
 const Comment = mongoose.model<IComment>('Comment',commentSchema);
 export default Comment;
+export const joiCommentValidation = (commentEntry: IComment)=>{
+    const schema = joi.object({
+        userId : joi.string().required(),
+        blogId : joi.string().required(),
+        commentMsg: joi.string().min(3).max(5000).required(),
+        commentLike: joi.array().items(joi.object({
+            byUser: joi.object({
+                userId: joi.string(),
+                like: joi.number().default(0),
+            })
+        })).default([]),
+        commentDate: joi.date()
+    });
+     return schema.validate(commentEntry);
+}

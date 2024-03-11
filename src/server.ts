@@ -3,91 +3,94 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import { createUser, fetchUsers, fetchUserById, patchUserById, deleteUserById,login } from './controller/userController';
 import { createCategory,fetchAllCategory,deleteCategory } from './controller/categoryController';
-import { createBlog, fetchBlog, fetchBlogById,fetchBlogByUserIdAndBlogId ,patchBlogById, deleteBlog } from './controller/blogController';
+import { createBlog, fetchBlog, fetchBlogById ,patchBlogById, deleteBlog } from './controller/blogController';
 import { createComment,fetchCommentByUser,fetchAllComments,patchCommentByUserById } from './controller/commentController';
 import { createContactMsg, fetchAllContactMsg, patchContactMsgById } from './controller/contactMsgController';
-import { createLike, fetchAllLike, fetchLikeByUserIdByComment, deleteLikeByUserIdAndCommentId } from './controller/likeController';
+import { verifyToken } from './authentication/verifyToken';
+import swaggerUi from 'swagger-ui-express'; 
+import * as swaggerDocument from './swagger.json';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 
 const app = express();
 
 app.use(bodyParser.json());
 
-const port: number = 5000;
-const connection_url: string = "mongodb+srv://mugaboandre:NirereNadine1983@cluster0.1518h6w.mongodb.net/MyBrand-Andre?retryWrites=true&w=majority&appName=Cluster0";
+const port: number | string = process.env.HOST as string | number || 4000;
+const connection_url: string = process.env.DB_URL!;
+
+app.get('/', (req, res) => {
+    res.send('MY-BRAND-ANDRE-BE');   
+  });
+  
 
 /* USER APIs */
 
-
 // CREATE A USER
+
 app.post('/users', createUser);
 //LOGIN 
 app.post('/user',login);
 // FETCH ALL USER
-app.get('/users', fetchUsers);
+app.get('/users', verifyToken ,fetchUsers);
 // FETCH USERS BY ID
-app.get('/user/:id', fetchUserById);
+app.get('/user/:id', verifyToken, fetchUserById);
 // UPDATE USER BY ID
-app.patch('/user/:id', patchUserById);
+app.patch('/user/:id', verifyToken, patchUserById);
 // DELETE USER BY ID
-app.delete('/user/:id', deleteUserById);
+app.delete('/user/:id', verifyToken, deleteUserById);
 
 // CATEGORY APIs
 
 //CREATE A CATEGORY
-app.post('/category',createCategory);
+app.post('/category',  verifyToken, createCategory);
 //FETCH ALL CATEGORY
-app.get('/categories',fetchAllCategory);
+app.get('/categories',  verifyToken, fetchAllCategory);
 //DELETE CATEGORY BY ID
-app.delete('/category/:id', deleteCategory);
+app.delete('/category/:id',  verifyToken, deleteCategory);
 
 
 // BLOG APIs
 
 // CREATE A BLOG
-app.post('/blogs', createBlog);
+app.post('/createBlogs',  verifyToken,  createBlog);
 // FETCH ALL BLOG
-app.get('/blogs', fetchBlog);
+app.get('/fetchBlogs',fetchBlog);
 // FETCH BLOG BY ID
-app.get('/blog/:id', fetchBlogById);
-//FETCH BLOG BY USER ID AND BLOG ID
-app.get('/blog/:u_id/:b_id', fetchBlogByUserIdAndBlogId);
+app.get('/fetchBlogById/:id',   verifyToken, fetchBlogById);
+
 // UPDATE BLOG BY ID
-app.patch('/blog/:id', patchBlogById);
+app.patch('/patchBlogById/:id',   verifyToken, patchBlogById);
 // DELETE BLOG BY ID
-app.delete('/blog/:id', deleteBlog);
+app.delete('/deleteBlogById/:id',  verifyToken,  deleteBlog);
 
 // COMMENT APIs
 
 //CREATE A COMMENT
-app.post('/comments',createComment);
+app.post('/comments',   verifyToken, createComment);
 //FETCH ALL COMMENT
-app.get('/comments',fetchAllComments);
+app.get('/comments',  verifyToken, fetchAllComments);
 //FETCH COMMENT BY USER
-app.get('/comment/:u_id',fetchCommentByUser);
+app.get('/comment/:userId',  verifyToken, fetchCommentByUser); 
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/comment/:u_id/:id',patchCommentByUserById);
+app.patch('/commentLike/:id',  verifyToken, patchCommentByUserById);
 
 // MESSAGE APIs
 
 //CREATE A CONTACT MESSAGE
 app.post('/contactMsgs',createContactMsg);
 //FETCH ALL CONTACT MSG
-app.get('/contactMsgs',fetchAllContactMsg);
+app.get('/contactMsgs',  verifyToken, fetchAllContactMsg);
 //PATCH CONTACT MSG
-app.patch('/readMsg/:id',patchContactMsgById);
+app.patch('/readMsg/:id',  verifyToken, patchContactMsgById);
 
 // LIKE APIs
 
-//CREATE A LIKE
-app.post('/likes',createLike);
-//FETCH ALL LIKE
-app.get('/likes',fetchAllLike);
-//FETCH LIKE BY USER U_ID AND COMMENT ID
-app.get('/like/:u_id/:c_id',fetchLikeByUserIdByComment);
-//DELETE LIKE BY USER ID AND COMMENT ID
-app.delete('/like/:u_id/:c_id',deleteLikeByUserIdAndCommentId);
 
 
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 mongoose.connect(connection_url)
@@ -108,3 +111,5 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 app.use(errorHandler);
+
+export default app;

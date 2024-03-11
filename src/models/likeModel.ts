@@ -1,16 +1,16 @@
 import mongoose,{Schema, Document} from "mongoose";
 
 export interface ILike extends Document {
-    u_id:string;
-    c_id:string;
+    userId:string;
+    commentId:string;
 }
 
 const like:Schema  = new Schema({
-    u_id:{
+    userId:{
         type:String,
         required:[true,'Please user id is required']
     },
-    c_id:{
+    commentId:{
         type:String,
         required:[true,'Please Comment id is required']
     }

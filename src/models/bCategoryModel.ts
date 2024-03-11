@@ -1,11 +1,12 @@
 import mongoose,{Schema, Document} from "mongoose";
+import joi from 'joi';
 
 export interface IBCategory extends Document {
-    bc_name:string;
+    category:string;
 }
 
 const bCategory:Schema  = new Schema({
-    bc_name:{
+    category:{
         type:String,
         required:[true,'Please Blog category name is required']
     }
@@ -13,3 +14,9 @@ const bCategory:Schema  = new Schema({
 
 const BCategory = mongoose.model<IBCategory>('BCategory',bCategory);
 export default BCategory;
+export const joiBlogCategoryValidation = (bCategory:IBCategory)=>{
+    const schema = joi.object({
+        category:joi.string().required()
+    });
+    return schema.validate(bCategory);
+}

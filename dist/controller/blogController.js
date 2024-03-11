@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,17 +31,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBlog = exports.patchBlogById = exports.fetchBlogByUserIdAndBlogId = exports.fetchBlogById = exports.fetchBlog = exports.createBlog = void 0;
-const blogModel_1 = __importDefault(require("../models/blogModel"));
+exports.deleteBlog = exports.patchBlogById = exports.fetchBlogById = exports.fetchBlog = exports.createBlog = void 0;
+const blogModel_1 = __importStar(require("../models/blogModel"));
+const verifyToken_1 = require("../authentication/verifyToken");
 //create blog
 const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const blogs = yield blogModel_1.default.create(req.body);
-        res.status(200).json(blogs);
+        const user = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        const { error } = (0, blogModel_1.joinBlogValidation)(req.body);
+        if (error) {
+            console.error(error);
+            res.status(400).json({ error: error.details[0].message });
+            return;
+        }
+        // console.log(user)
+        if (user && user.isAdmin) {
+            // Create the blog
+            blogModel_1.default.create(req.body)
+                .then(blog => {
+                res.status(200).json({ blog, message: "Blog Created" });
+            });
+        }
+        else {
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED. ONLY ADMIN CAN POST BLOGS" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -30,7 +67,12 @@ exports.createBlog = createBlog;
 const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const blogs = yield blogModel_1.default.find({});
-        res.status(200).json(blogs);
+        if (blogs.length === 0) {
+            res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
+        }
+        else {
+            res.status(200).json(blogs);
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -41,9 +83,15 @@ exports.fetchBlog = fetchBlog;
 //fetch blog by id
 const fetchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const blog = yield blogModel_1.default.findById(id);
-        res.status(200).json(blog);
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser) {
+            const { id } = req.params;
+            const blog = yield blogModel_1.default.findById(id);
+            res.status(200).json(blog);
+        }
+        else {
+            res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -51,32 +99,21 @@ const fetchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.fetchBlogById = fetchBlogById;
-//fetch blog by user id and blog id
-const fetchBlogByUserIdAndBlogId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { u_id } = req.params;
-        const { b_id } = req.params;
-        const blog = yield blogModel_1.default.findOne({ u_id: u_id, _id: b_id }, req.body);
-        if (!blog) {
-            return res.status(404).json({ message: 'Blog not found for the specified userID and blogID' });
-        }
-        res.status(200).json(blog);
-    }
-    catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: error.message });
-    }
-});
-exports.fetchBlogByUserIdAndBlogId = fetchBlogByUserIdAndBlogId;
 //patch blog by id
 const patchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const blog = yield blogModel_1.default.updateOne({ _id: id }, req.body);
-        if (!blog) {
-            return res.status(404).json({ message: `Cannot find any user with ID${id}` });
+        const user = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (user && user.isAdmin) {
+            const { id } = req.params;
+            const blog = yield blogModel_1.default.updateOne({ _id: id }, req.body);
+            if (!blog) {
+                return res.status(404).json({ message: `Cannot find any user with ID${id}` });
+            }
+            res.status(200).json({ blog, message: "BLOG UPDATED SUCCESSFULLY" });
         }
-        res.status(200).json(blog);
+        else {
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO EDIT A BLOG" });
+        }
     }
     catch (error) {
         console.log(error.message);
@@ -87,12 +124,18 @@ exports.patchBlogById = patchBlogById;
 //Delete blog by id
 const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const blog = yield blogModel_1.default.deleteOne({ _id: id });
-        if (blog.deletedCount === 0) {
-            return res.status(404).json({ message: `cannot find any category with ID ${id}` });
+        const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        if (checkUser && checkUser.isAdmin) {
+            const { id } = req.params;
+            const blog = yield blogModel_1.default.deleteOne({ _id: id });
+            if (blog.deletedCount === 0) {
+                return res.status(404).json({ message: `cannot find any category with ID ${id}` });
+            }
+            res.status(200).json({ blog, message: "Blog deleted successfully " });
         }
-        res.status(200).json(blog);
+        else {
+            res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A BLOG" });
+        }
     }
     catch (error) {
         console.log(error.message);
