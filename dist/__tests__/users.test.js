@@ -111,8 +111,6 @@ describe('User APIs', () => {
                 const response = yield (0, supertest_1.default)(server_1.default)
                     .get(`/user/${userId}`)
                     .set('Authorization', `bearer ${token}`);
-                // console.log(userId);
-                // console.log(response.status);
                 expect(response.status).toBe(200);
             }
             catch (error) {

@@ -108,8 +108,6 @@ describe('User APIs', () => {
                 const response = await supertest(app)
                     .get(`/user/${userId}`)
                     .set('Authorization', `bearer ${token}`);
-                    // console.log(userId);
-                    // console.log(response.status);
                 expect(response.status).toBe(200);
             } catch (error) {
                 throw error;
