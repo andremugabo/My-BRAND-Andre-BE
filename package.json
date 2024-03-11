@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "nodemon dist/server.js",
-    "testJest":"jest --watchAll --detectOpenHandles"
+    "testJest": "jest --watchAll --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
