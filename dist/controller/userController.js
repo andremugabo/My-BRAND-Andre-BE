@@ -174,7 +174,7 @@ const deleteUserById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             if (!user) {
                 return res.status(404).json({ message: `Can not find any user with ID ${id}` });
             }
-            res.status(500).json({ user, message: "USER DELETED SUCCESSFULLY " });
+            res.status(200).json({ user, message: "USER DELETED SUCCESSFULLY " });
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO DELETE A USER" });

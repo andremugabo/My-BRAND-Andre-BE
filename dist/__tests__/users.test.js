@@ -66,6 +66,36 @@ describe('User APIs', () => {
                 throw error;
             }
         }));
+        it('should not provide required information to create a user', () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                const response = yield (0, supertest_1.default)(server_1.default)
+                    .post('/users')
+                    .send("");
+                console.log(response.status);
+                expect(response.status).toBe(400);
+                expect(response.body).toBeNaN;
+            }
+            catch (error) {
+                throw error;
+            }
+        }));
+        it('Users exist  ', () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                let email = "";
+                const getUser = yield usersModel_1.default.find({});
+                for (const iterator of getUser) {
+                    email = iterator.email;
+                }
+                const response = yield (0, supertest_1.default)(server_1.default)
+                    .post('/users')
+                    .send(email);
+                console.log(response.status);
+                expect(response.status).toBe(400);
+            }
+            catch (error) {
+                throw error;
+            }
+        }));
     });
     describe('User login', () => {
         it('Should Check if user exist and Generate Token', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -104,13 +134,52 @@ describe('User APIs', () => {
             try {
                 let userId = "";
                 const getUser = yield usersModel_1.default.find({});
-                console.log(getUser);
+                // console.log(getUser);
                 for (const iterator of getUser) {
                     userId = iterator._id.toHexString();
                 }
                 const response = yield (0, supertest_1.default)(server_1.default)
                     .get(`/user/${userId}`)
                     .set('Authorization', `bearer ${token}`);
+                expect(response.status).toBe(200);
+            }
+            catch (error) {
+                throw error;
+            }
+        }));
+    });
+    describe('Edit a User by Id', () => {
+        it('It should Patch one user by ID', () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                let userId = "";
+                const getUser = yield usersModel_1.default.find({});
+                // console.log(getUser);
+                for (const iterator of getUser) {
+                    userId = iterator._id.toHexString();
+                }
+                const response = yield (0, supertest_1.default)(server_1.default)
+                    .patch(`/user/${userId}`)
+                    .set('Authorization', `bearer ${token}`);
+                expect(response.status).toBe(200);
+            }
+            catch (error) {
+                throw error;
+            }
+        }));
+    });
+    describe('Delete a User by Id', () => {
+        it('It should delete one user by ID', () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                let userId = "";
+                const getUser = yield usersModel_1.default.find({});
+                // console.log(getUser);
+                for (const iterator of getUser) {
+                    userId = iterator._id.toHexString();
+                }
+                const response = yield (0, supertest_1.default)(server_1.default)
+                    .delete(`/user/${userId}`)
+                    .set('Authorization', `bearer ${token}`);
+                // console.log(response.status);
                 expect(response.status).toBe(200);
             }
             catch (error) {

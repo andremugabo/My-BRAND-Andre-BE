@@ -60,6 +60,40 @@ describe('User APIs', () => {
                 throw error;
             }
         });
+
+        it('should not provide required information to create a user', async () => {
+            try {
+                const response = await (supertest(app) as any)
+                    .post('/users')
+                    .send("");
+                    console.log(response.status);
+                expect(response.status).toBe(400);
+                expect(response.body).toBeNaN;
+            } catch (error) {
+                
+                throw error;
+            }
+        });
+
+        it('Users exist  ', async () => {
+            try {
+                let email : string = "";
+                const getUser = await Users.find({});
+                for (const iterator of getUser) {
+                    email = iterator.email;
+                }
+                const response = await (supertest(app) as any)
+                    .post('/users')
+                    .send(email);
+                    console.log(response.status);
+                expect(response.status).toBe(400);
+            } catch (error) {
+                
+                throw error;
+            }
+        });
+
+
     });
 
     describe('User login', () => {
@@ -101,7 +135,7 @@ describe('User APIs', () => {
             try {
                 let userId : string = "";
                 const getUser = await Users.find({});
-                console.log(getUser);
+                // console.log(getUser);
                 for (const iterator of getUser) {
                     userId = iterator._id.toHexString();
                 }
@@ -116,6 +150,45 @@ describe('User APIs', () => {
     });
     
 
+    describe('Edit a User by Id', () => {
+        it('It should Patch one user by ID', async () => {
+            try {
+                let userId : string = "";
+                const getUser = await Users.find({});
+                // console.log(getUser);
+                for (const iterator of getUser) {
+                    userId = iterator._id.toHexString();
+                }
+                const response = await supertest(app)
+                    .patch(`/user/${userId}`)
+                    .set('Authorization', `bearer ${token}`);
+                expect(response.status).toBe(200);
+            } catch (error) {
+                throw error;
+            }
+        });
+    });
+
+
+    describe('Delete a User by Id', () => {
+        it('It should delete one user by ID', async () => {
+            try {
+                let userId : string = "";
+                const getUser = await Users.find({});
+                // console.log(getUser);
+                for (const iterator of getUser) {
+                    userId = iterator._id.toHexString();
+                }
+                const response = await supertest(app)
+                    .delete(`/user/${userId}`)
+                    .set('Authorization', `bearer ${token}`);
+                // console.log(response.status);
+                expect(response.status).toBe(200);
+            } catch (error) {
+                throw error;
+            }
+        });
+    });
 
 
 
