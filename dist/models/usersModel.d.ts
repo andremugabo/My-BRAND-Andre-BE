@@ -37,35 +37,8 @@ declare const Users: mongoose.Model<IUsers, {}, {}, {}, mongoose.Document<unknow
 }, any>;
 export declare const joiUserValidation: (userEntry: IUsers) => joi.ValidationResult<any>;
 export default Users;
-export declare const getUsers: () => mongoose.Query<(mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-})[], mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}, {}, IUsers, "find">;
-export declare const getUsersByEmail: (email: string) => mongoose.Query<(mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}) | null, mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}, {}, IUsers, "findOne">;
 export declare const getUsersById: (id: String) => mongoose.Query<(mongoose.Document<unknown, {}, IUsers> & IUsers & {
     _id: mongoose.Types.ObjectId;
 }) | null, mongoose.Document<unknown, {}, IUsers> & IUsers & {
     _id: mongoose.Types.ObjectId;
 }, {}, IUsers, "findOne">;
-export declare const createUser: (values: Record<string, any>) => Promise<(<T = IUsers & {
-    _id: mongoose.Types.ObjectId;
-}>(options?: mongoose.ToObjectOptions<mongoose.Document<unknown, {}, unknown> & {
-    _id: mongoose.Types.ObjectId;
-}> | undefined) => mongoose.Require_id<T>) & (<T_1 = any>(options?: mongoose.ToObjectOptions<mongoose.Document<unknown, {}, unknown> & {
-    _id: mongoose.Types.ObjectId;
-}> | undefined) => mongoose.Require_id<T_1>)>;
-export declare const deleteUserById: (id: string) => mongoose.Query<(mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}) | null, mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}, {}, IUsers, "findOne">;
-export declare const updateUserById: (id: string, values: Record<string, any>) => mongoose.Query<(mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}) | null, mongoose.Document<unknown, {}, IUsers> & IUsers & {
-    _id: mongoose.Types.ObjectId;
-}, {}, IUsers, "findOneAndUpdate">;

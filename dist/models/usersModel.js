@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserById = exports.deleteUserById = exports.createUser = exports.getUsersById = exports.getUsersByEmail = exports.getUsers = exports.joiUserValidation = void 0;
+exports.getUsersById = exports.joiUserValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const joi_1 = __importDefault(require("joi"));
 const userSchema = new mongoose_1.Schema({
@@ -68,15 +68,5 @@ const joiUserValidation = (userEntry) => {
 };
 exports.joiUserValidation = joiUserValidation;
 exports.default = Users;
-const getUsers = () => Users.find();
-exports.getUsers = getUsers;
-const getUsersByEmail = (email) => Users.findOne({ email });
-exports.getUsersByEmail = getUsersByEmail;
 const getUsersById = (id) => Users.findById(id);
 exports.getUsersById = getUsersById;
-const createUser = (values) => new Users(values).save().then((user) => user.toObject);
-exports.createUser = createUser;
-const deleteUserById = (id) => Users.findOne({ _id: id });
-exports.deleteUserById = deleteUserById;
-const updateUserById = (id, values) => Users.findByIdAndUpdate(id, values);
-exports.updateUserById = updateUserById;
