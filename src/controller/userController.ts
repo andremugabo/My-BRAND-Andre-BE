@@ -42,7 +42,6 @@ export const createUser = async (req: express.Request, res: express.Response) =>
             FullName,
             email,
             password: hashedPassword,
-            isAdmin
         });
 
         res.status(200).json(user);
