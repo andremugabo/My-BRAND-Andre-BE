@@ -56,7 +56,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { error } = (0, usersModel_1.joiUserValidation)(req.body);
         if (error) {
             console.error(error);
-            res.status(400).json({ error: error.details[0].message });
+            res.status(400).json({ error: error.details[0].message, status: 400 });
         }
         // Check if email already exists
         const checkIfEmailExist = yield usersModel_1.default.findOne({ email });
@@ -71,7 +71,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             email,
             password: hashedPassword,
         });
-        res.status(200).json(user);
+        res.status(200).json({ status: 200 });
     }
     catch (error) {
         console.log(error.message);

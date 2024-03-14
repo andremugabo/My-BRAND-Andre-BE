@@ -27,7 +27,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
 
         if(error){
             console.error(error);
-            res.status(400).json({ error: error.details[0].message });
+            res.status(400).json({ error: error.details[0].message,status:400 });
         }
 
 
@@ -47,7 +47,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
             password: hashedPassword,
         });
 
-        res.status(200).json(user);
+        res.status(200).json({status:200});
     } catch (error) {
         console.log((error as Error).message);
         res.status(500).json({ message: "Internal server error" });
