@@ -15,13 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const server_1 = __importDefault(require("../server"));
 const usersModel_1 = __importDefault(require("../models/usersModel"));
-const jest_1 = require("@types/jest");
 let token = '';
 let server;
-(0, jest_1.beforeAll)(() => __awaiter(void 0, void 0, void 0, function* () {
+beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield usersModel_1.default.deleteMany({});
 }));
-(0, jest_1.beforeAll)(() => {
+beforeAll(() => {
     server = server_1.default.listen();
 });
 afterAll((done) => {
