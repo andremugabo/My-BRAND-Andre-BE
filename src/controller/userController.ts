@@ -74,12 +74,12 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 return res.status(400).json({message:"Incorrect password !!"});
             }
 
-
+            
             const payload = {
                 sub: loginUser.id,
             }
             const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'1h'});
-            res.status(200).json({token})
+            res.status(200).json({token,loginUser});
 
 
         } catch (error) {
