@@ -86,7 +86,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!email || !password) {
             res.status(400).json({ message: "Please Provide your Email and Password" });
         }
-        const loginUser = yield usersModel_1.default.findOne({ email });
+        const loginUser = yield usersModel_1.default.findOne({ email }, { password: 0 });
         if (!loginUser) {
             return res.status(400).json({ message: "Your are not registered !!!" });
         }
