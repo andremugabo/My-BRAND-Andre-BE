@@ -79,7 +79,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 sub: loginUser.id,
             }
             const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'1h'});
-            res.status(200).json({token,loginUser});
+            res.status(200).json({token,message:'hello'});
 
 
         } catch (error) {
