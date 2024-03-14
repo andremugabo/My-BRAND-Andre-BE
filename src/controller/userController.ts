@@ -64,7 +64,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 res.status(400).json({message:"Please Provide your Email and Password"});
             }
 
-            const loginUser = await Users.findOne({email});
+            const loginUser = await Users.findOne({email,password: 0});
             if(!loginUser){
                 return res.status(400).json({message:"Your are not registered !!!"});
             }
