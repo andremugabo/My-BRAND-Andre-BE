@@ -14,7 +14,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
     try {
 
 
-        const { FullName, email, password, isAdmin } = req.body;
+        const { FullName, email, password} = req.body;
         // Validate required fields
         if (!FullName || !email || !password) {
             return res.status(400).json({ message: "Please provide all required information to create a user!" });
