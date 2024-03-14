@@ -97,8 +97,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const payload = {
             sub: loginUser.id,
         };
+        const loggedUser = loginUser.isAdmin;
         const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_DECODE_KEY, { expiresIn: '1h' });
-        res.status(200).json({ token });
+        res.status(200).json({ token, loggedUser });
     }
     catch (error) {
         console.log(error.message);
