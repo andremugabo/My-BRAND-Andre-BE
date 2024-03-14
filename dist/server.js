@@ -38,11 +38,16 @@ const verifyToken_1 = require("./authentication/verifyToken");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("./swagger.json"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 const port = process.env.HOST || 5000;
 const connection_url = process.env.DB_URL;
+app.use((0, cors_1.default)({
+    origin: '*',
+    credentials: true,
+}));
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE');
 });

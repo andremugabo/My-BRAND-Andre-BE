@@ -11,6 +11,7 @@ import { verifyToken } from './authentication/verifyToken';
 import swaggerUi from 'swagger-ui-express'; 
 import * as swaggerDocument from './swagger.json';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config();
 
 
@@ -21,7 +22,10 @@ app.use(bodyParser.json());
 
 const port: number | string = process.env.HOST as string | number || 5000; 
 const connection_url: string = process.env.DB_URL!;
-
+app.use(cors({
+    origin:'*',
+    credentials:true,
+}))
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE');   
   });
