@@ -51,7 +51,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log(password);
         // Validate required fields
         if (!FullName || !email || !password) {
-            return res.status(400).json({ message: "Please provide all required information to create a user!" });
+            return res.status(400).json({ message: "Please provide all required information to create a user!", status: 400 });
         }
         const { error } = (0, usersModel_1.joiUserValidation)(req.body);
         if (error) {
@@ -61,7 +61,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // Check if email already exists
         const checkIfEmailExist = yield usersModel_1.default.findOne({ email });
         if (checkIfEmailExist) {
-            return res.status(400).json({ message: "A user is registered with the same email, Try another email, or Login " });
+            return res.status(422).json({ message: "A user is registered with the same email, Try another email, or Login ", status: 422 });
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);

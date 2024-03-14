@@ -20,7 +20,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
         console.log(password);
         // Validate required fields
         if (!FullName || !email || !password) {
-            return res.status(400).json({ message: "Please provide all required information to create a user!" });
+            return res.status(400).json({ message: "Please provide all required information to create a user!",status:400 });
         }
 
         const {error} = joiUserValidation(req.body);
@@ -34,7 +34,7 @@ export const createUser = async (req: express.Request, res: express.Response) =>
         // Check if email already exists
         const checkIfEmailExist = await Users.findOne({email});
         if (checkIfEmailExist) {
-            return res.status(400).json({ message: "A user is registered with the same email, Try another email, or Login " });
+            return res.status(422).json({ message: "A user is registered with the same email, Try another email, or Login ", status:422 });
         }
 
         // Hash the password
