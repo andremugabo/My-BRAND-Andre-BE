@@ -62,6 +62,7 @@ const joiUserValidation = (userEntry) => {
         email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         password: joi_1.default.string().required(),
         picture: joi_1.default.string().optional(),
+        description: joi_1.default.string().optional(),
         isAdmin: joi_1.default.boolean().optional()
     });
     return schema.validate(userEntry);

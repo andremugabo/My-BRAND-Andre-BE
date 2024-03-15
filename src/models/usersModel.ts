@@ -42,6 +42,7 @@ export const joiUserValidation = (userEntry: IUsers)=>{
         email:joi.string().email({minDomainSegments:2,tlds:{allow:['com','net']}}).required(),
         password:joi.string().required(),
         picture:joi.string().optional(),
+        description:joi.string().optional(),
         isAdmin:joi.boolean().optional()
     });
     return schema.validate(userEntry);
