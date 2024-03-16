@@ -85,6 +85,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
 
         } catch (error) {
             console.log((error as Error).message);
+            console.error("Error login user:",error);
             res.status(500).json({ message: "Internal server error" });
         }
 }
