@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 const port: number | string = process.env.HOST as string | number || 5000; 
 const connection_url: string = process.env.DB_URL!;
 app.use(cors({
-    origin:'*',
+    origin:'http://127.0.0.1:5501',
     credentials:true,
 }))
 app.get('/', (req, res) => {
