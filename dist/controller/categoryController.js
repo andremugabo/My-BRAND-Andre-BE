@@ -46,7 +46,7 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
             const { error } = (0, bCategoryModel_1.joiBlogCategoryValidation)(req.body);
             if (error) {
                 console.error(error);
-                return res.status(400).json({ error: error.details[0].message });
+                return res.status(400).json({ error: error.details[0].message, status: 400 });
             }
             const checkCategoryExist = yield bCategoryModel_1.default.findOne({ category });
             if (checkCategoryExist) {

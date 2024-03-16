@@ -15,7 +15,7 @@ export const createCategory = async(req: express.Request, res: express.Response)
                 const {error} = joiBlogCategoryValidation(req.body);
                 if(error){
                     console.error(error);
-                    return res.status(400).json({ error: error.details[0].message });
+                    return res.status(400).json({ error: error.details[0].message,status:400 });
                 }
                 const checkCategoryExist = await BCategory.findOne({category});
                 if(checkCategoryExist){
