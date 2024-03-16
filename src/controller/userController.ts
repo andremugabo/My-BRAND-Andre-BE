@@ -64,7 +64,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 res.status(400).json({message:"PLEASE PROVIDE YOUR EMAIL AND PASSWORD"});
             }
 
-            const loginUser = await Users.findOne({email}).select('-password');
+            const loginUser = await Users.findOne({email});
             if(!loginUser){
                 return res.status(400).json({message:"YOUR ARE REGISTERED !!!"});
             }
@@ -79,7 +79,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 sub: loginUser.id,
             }
             const loggedUser = loginUser.isAdmin;
-            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'1h'});
+            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'5h'});
             res.status(200).json({token,loggedUser,loginUser});
 
 
