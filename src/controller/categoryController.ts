@@ -8,9 +8,9 @@ export const createCategory = async(req: express.Request, res: express.Response)
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser && checkUser.isAdmin){
                 const {category} = req.body;
-                if(!category){
-                    return res.status(400).json({ message: "Please provide the category" });
-                }
+                // if(!category){
+                //     return res.status(400).json({ message: "Please provide the category",status:400 });
+                // }
 
                 const {error} = joiBlogCategoryValidation(req.body);
                 if(error){
@@ -23,7 +23,7 @@ export const createCategory = async(req: express.Request, res: express.Response)
                 }
 
                 const getCategory = await BCategory.create(req.body);
-                res.status(200).json(getCategory);
+                res.status(200).json({getCategory,message:"CATEGORY CREATED SUCCESSFULLY !!",status:200});
         } else{
             res.status(401).json({ message: "YOU NEED TO LOGIN AS ADMIN FIRST" });
         }

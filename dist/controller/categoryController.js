@@ -40,9 +40,9 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser && checkUser.isAdmin) {
             const { category } = req.body;
-            if (!category) {
-                return res.status(400).json({ message: "Please provide the category" });
-            }
+            // if(!category){
+            //     return res.status(400).json({ message: "Please provide the category",status:400 });
+            // }
             const { error } = (0, bCategoryModel_1.joiBlogCategoryValidation)(req.body);
             if (error) {
                 console.error(error);
@@ -53,7 +53,7 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 return res.status(400).json({ message: "The Category name is already registered" });
             }
             const getCategory = yield bCategoryModel_1.default.create(req.body);
-            res.status(200).json(getCategory);
+            res.status(200).json({ getCategory, message: "CATEGORY CREATED SUCCESSFULLY !!", status: 200 });
         }
         else {
             res.status(401).json({ message: "YOU NEED TO LOGIN AS ADMIN FIRST" });
