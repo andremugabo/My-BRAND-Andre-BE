@@ -38,67 +38,49 @@ const verifyToken_1 = require("./authentication/verifyToken");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swaggerDocument = __importStar(require("./swagger.json"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-app.use(body_parser_1.default.json());
-const port = process.env.HOST || 5000;
+const port = process.env.PORT || 5000;
 const connection_url = process.env.DB_URL;
-app.use((0, cors_1.default)({
-    origin: '*',
-    credentials: true,
-}));
+// CORS middleware
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5501');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
+});
+app.use(body_parser_1.default.json());
+// Routes
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE');
 });
-/* USER APIs */
-// CREATE A USER
+// User APIs
 app.post('/users', userController_1.createUser);
-//LOGIN 
 app.post('/user', userController_1.login);
-// FETCH ALL USER
 app.get('/users', verifyToken_1.verifyToken, userController_1.fetchUsers);
-// FETCH USERS BY ID
 app.get('/user/:id', verifyToken_1.verifyToken, userController_1.fetchUserById);
-// UPDATE USER BY ID
 app.patch('/user/:id', verifyToken_1.verifyToken, userController_1.patchUserById);
-// DELETE USER BY ID
 app.delete('/user/:id', verifyToken_1.verifyToken, userController_1.deleteUserById);
-// CATEGORY APIs
-//CREATE A CATEGORY
+// Category APIs
 app.post('/category', verifyToken_1.verifyToken, categoryController_1.createCategory);
-//FETCH ALL CATEGORY
 app.get('/categories', verifyToken_1.verifyToken, categoryController_1.fetchAllCategory);
-//DELETE CATEGORY BY ID
 app.delete('/category/:id', verifyToken_1.verifyToken, categoryController_1.deleteCategory);
-// BLOG APIs
-// CREATE A BLOG
+// Blog APIs
 app.post('/createBlogs', verifyToken_1.verifyToken, blogController_1.createBlog);
-// FETCH ALL BLOG
 app.get('/fetchBlogs', blogController_1.fetchBlog);
-// FETCH BLOG BY ID
 app.get('/fetchBlogById/:id', verifyToken_1.verifyToken, blogController_1.fetchBlogById);
-// UPDATE BLOG BY ID
 app.patch('/patchBlogById/:id', verifyToken_1.verifyToken, blogController_1.patchBlogById);
-// DELETE BLOG BY ID
 app.delete('/deleteBlogById/:id', verifyToken_1.verifyToken, blogController_1.deleteBlog);
-// COMMENT APIs
-//CREATE A COMMENT
+// Comment APIs
 app.post('/comments', verifyToken_1.verifyToken, commentController_1.createComment);
-//FETCH ALL COMMENT
 app.get('/comments', verifyToken_1.verifyToken, commentController_1.fetchAllComments);
-//FETCH COMMENT BY USER
 app.get('/comment/:userId', verifyToken_1.verifyToken, commentController_1.fetchCommentByUser);
-//PATCH COMMENT BY USER ID AND COMMENT ID
 app.patch('/commentLike/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
-// MESSAGE APIs
-//CREATE A CONTACT MESSAGE
+// Message APIs
 app.post('/contactMsgs', contactMsgController_1.createContactMsg);
-//FETCH ALL CONTACT MSG
 app.get('/contactMsgs', verifyToken_1.verifyToken, contactMsgController_1.fetchAllContactMsg);
-//PATCH CONTACT MSG
 app.patch('/readMsg/:id', verifyToken_1.verifyToken, contactMsgController_1.patchContactMsgById);
-// LIKE APIs
+// Like APIs
 app.use('/swagger', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 mongoose_1.default.connect(connection_url)
     .then(() => {
