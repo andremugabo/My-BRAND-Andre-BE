@@ -8,9 +8,9 @@ export const createCategory = async(req: express.Request, res: express.Response)
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser && checkUser.isAdmin){
                 const {category} = req.body;
-                // if(!category){
-                //     return res.status(400).json({ message: "Please provide the category",status:400 });
-                // }
+                if(!category){
+                    return res.status(400).json({ message: "Please provide the category",status:400 });
+                }
 
                 const {error} = joiBlogCategoryValidation(req.body);
                 if(error){
