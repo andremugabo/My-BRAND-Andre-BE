@@ -64,7 +64,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
 
             const loginUser = await Users.findOne({email});
             if(!loginUser){
-                return res.status(400).json({message:"Your are not registered !!!"});
+                return res.status(400).json({message:"YOU ARE NOT REGISTERED !! REGISTER FIRST"});
             }
 
             const checkPassword = await bcrypt.compare(password, loginUser.password);
