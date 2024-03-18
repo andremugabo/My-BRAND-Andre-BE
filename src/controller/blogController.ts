@@ -9,8 +9,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
     try {
         const user = await getUser((req as any).myAppToken);
         if (user && user.isAdmin) { 
-            console.log(userId);
-        const {userId,blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
+        const {userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
         if(!userId || !blogTitle || !blogCategoryId || !blogDescription || !blogContent || !blogImg || !blogDate){
             return res.status(400).json({ message: "Please provide all required information to create a Blog!",status:400 });
         }
@@ -25,7 +24,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
             // Create the blog
             Blog.create(req.body)
                 .then(blog => {
-                    res.status(200).json({blog,message: "Blog Created" });
+                    res.status(200).json({blog,message: "Blog Created",status:200});
                 })
         } else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED. ONLY ADMIN CAN POST BLOGS" });
