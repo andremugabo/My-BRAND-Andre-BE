@@ -14,11 +14,11 @@ export interface IBlog extends Document{
 const blogSchema : Schema = new Schema({
     userId:{
         type:String,
-        required:[true],
+        required:true,
     },
     blogCategoryId:{
         type:String,
-        required:[true]
+        required:true
     },
     blogTitle:{
         type:String,
@@ -38,7 +38,7 @@ const blogSchema : Schema = new Schema({
     },
     blogDate:{
         type:Date,
-        default: Date.now
+        default: Date
     }
 });
 
