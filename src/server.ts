@@ -12,8 +12,10 @@ import * as swaggerDocument from './swagger.json';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const app: express.Application = express();
 
+const app: express.Application = express();
+const port: number | string = process.env.PORT || 5000;
+const connection_url: string = process.env.DB_URL!;
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -26,15 +28,6 @@ app.use((req, res, next) => {
   
   next(); 
 });
-
-
-
-
-
-const port: number | string = process.env.PORT || 5000;
-const connection_url: string = process.env.DB_URL!;
-
-
 
 
 app.use(bodyParser.json());
