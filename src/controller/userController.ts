@@ -66,7 +66,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
 
             const loginUser = await Users.findOne({email});
             if(!loginUser){
-                return res.status(400).json({message:"YOUR ARE REGISTERED !!!"});
+                return res.status(400).json({message:"YOUR ARE NOT REGISTERED !!!"});
             }
 
             const checkPassword = await bcrypt.compare(password, loginUser.password);
@@ -79,7 +79,7 @@ export const login = async(req: express.Request, res:express.Response)=>{
                 sub: loginUser.id,
             }
             const loggedUser = loginUser.isAdmin;
-            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'5h'});
+            const token = jsonwebtoken.sign(payload, process.env.JWT_DECODE_KEY!, {expiresIn:'10h'});
             res.status(200).json({token,loggedUser,loginUser});
 
 
