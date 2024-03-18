@@ -51,17 +51,17 @@ export const fetchAllComments = async(req: express.Request, res: express.Respons
 }
 
 //fetch comment by user id
-export const fetchCommentByUser = async(req: express.Request, res: express.Response)=>{
+export const fetchCommentByBlog = async(req: express.Request, res: express.Response)=>{
     try {
         const checkUser = await getUser((req as any).myAppToken);
         if(checkUser){
-            const {userId} = req.params;
-            console.log(userId);
-            const comment = await Comment.find({userId:userId});
+            const {blogId} = req.params;
+            console.log(blogId);
+            const comment = await Comment.find({blogId:blogId});
             if(comment.length !== 0){
                 res.status(200).json(comment);
             }else{
-                res.status(400).json({message:"THERE IS NO COMMENT DISPLAY FOR THE GIVEN USER"});
+                res.status(400).json({message:"THERE IS NO COMMENT DISPLAY FOR THE GIVEN BLOG"});
             }
             
         } else{
