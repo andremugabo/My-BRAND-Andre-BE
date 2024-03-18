@@ -8,8 +8,6 @@ import { getUser } from '../authentication/verifyToken';
 export const createBlog = async (req: express.Request, res: express.Response) => {
     try {
         const user = await getUser((req as any).myAppToken);
-        const {userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
-        console.log(userId);
         const {error} = joinBlogValidation(req.body);
         if(error){
             console.error(error);

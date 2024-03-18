@@ -2,7 +2,6 @@ import mongoose,{Schema, Document} from "mongoose";
 import joi from 'joi';
 
 export interface IBlog extends Document{
-    userId :string;
     blogCategoryId:string;
     blogTitle: string;
     blogDescription:string;
@@ -12,13 +11,10 @@ export interface IBlog extends Document{
 }
 
 const blogSchema : Schema = new Schema({
-    userId:{
-        type:String,
-        required:[true],
-    },
+   
     blogCategoryId:{
         type:String,
-        required:[true]
+        required:true
     },
     blogTitle:{
         type:String,
@@ -46,7 +42,6 @@ const Blog = mongoose.model<IBlog>('Blog',blogSchema);
 export default Blog;
 export const joinBlogValidation = (blogEntry : IBlog)=>{
     const schema = joi.object({
-        userId : joi.string().required(),
         blogTitle:joi.string().required(),
         blogCategoryId: joi.string().required(),
         blogDescription: joi.string().min(10).max(500).required(),
