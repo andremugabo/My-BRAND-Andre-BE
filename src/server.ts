@@ -18,16 +18,27 @@ const port: number | string = process.env.PORT || 5000;
 const connection_url: string = process.env.DB_URL!;
 
 // CORS middleware
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+
+
+// CORS middleware
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io/MyBRAND-Andre']; // Add other allowed origins as needed
+  const origin: string | undefined = req.headers.origin as string;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
   
   next(); 
 });
+
 
 
 app.use(bodyParser.json());
