@@ -10,6 +10,7 @@ import { verifyToken } from './authentication/verifyToken';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from './swagger.json';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ const connection_url: string = process.env.DB_URL!;
 
 // CORS middleware
 
-
+app.use(cors());
 // CORS middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
   const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io/MyBRAND-Andre']; // Add other allowed origins as needed
