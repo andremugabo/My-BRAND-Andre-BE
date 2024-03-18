@@ -830,26 +830,7 @@
           "type": "string"
         },
         "commentLike": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "byUser": {
-                "type": "object",
-                "properties": {
-                  "userId": {
-                    "type": "string"
-                  },
-                  "like": {
-                    "type": "integer"
-                  }
-                },
-                "required": [  
-                  "userId" 
-                ]
-              }
-            }
-          }
+          "type": "array"          
         },
         "commentDate": {
           "type": "string",
