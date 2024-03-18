@@ -8,7 +8,9 @@ import { getUser } from '../authentication/verifyToken';
 export const createBlog = async (req: express.Request, res: express.Response) => {
     try {
         const user = await getUser((req as any).myAppToken);
-        const {userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
+        if (user && user.isAdmin) { 
+        const userId:string = user._id;    
+        const {blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
         console.log(userId);
         if(!userId || !blogTitle || !blogCategoryId || !blogDescription || !blogContent || !blogImg || !blogDate){
             return res.status(400).json({ message: "Please provide all required information to create a Blog!",status:400 });
@@ -19,8 +21,8 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
             res.status(400).json({ error: error.details[0].message });
             return;
         }
-        // console.log(user)
-        if (user && user.isAdmin) { 
+        
+       
             // Create the blog
             Blog.create(req.body)
                 .then(blog => {
