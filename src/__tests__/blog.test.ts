@@ -25,7 +25,6 @@ const admin = {
 
 const oneBlog ={
     
-		userId: "65e4eeeb2d8dea2ef01e05a3",
 		blogCategoryId: "65e5a8d61b6d294fc6c84761",
 		blogTitle: "Design",
 		blogDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit, odio nec porttitor feugiat, eros ante rutrum sem, eu vehicula libero justo id dui",
@@ -36,7 +35,6 @@ const oneBlog ={
 };
 const createBlogs = [
     {
-        userId: "65e4eeeb2d8dea2ef01e05a3",
         blogCategoryId: "65e5a8d61b6d294fc6c84761",
         blogTitle: "Techno",
         blogDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit, odio nec porttitor feugiat, eros ante rutrum sem, eu vehicula libero justo id dui",
@@ -45,7 +43,6 @@ const createBlogs = [
         blogDate: "2024-03-04T11:29:01.093Z"
       },
       {
-        userId: "65e4eeeb2d8dea2ef01e05a3",
         blogCategoryId: "65e5a8d61b6d294fc6c84761",
         blogTitle: "Design",
         blogDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit, odio nec porttitor feugiat, eros ante rutrum sem, eu vehicula libero justo id dui",
@@ -54,7 +51,6 @@ const createBlogs = [
         blogDate: "2024-03-04T11:36:13.410Z"
       },
       {
-        userId: "65e4eeeb2d8dea2ef01e05a3",
         blogCategoryId: "65e5a8d61b6d294fc6c84761",
         blogTitle: "Design",
         blogDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit, odio nec porttitor feugiat, eros ante rutrum sem, eu vehicula libero justo id dui",
