@@ -788,9 +788,6 @@
     "Blog": {
       "type": "object",
       "properties": {
-        "userId": {
-          "type": "string"
-        },
         "blogCategoryId": {
           "type": "string"
         },
