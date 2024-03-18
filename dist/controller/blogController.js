@@ -39,6 +39,8 @@ const verifyToken_1 = require("../authentication/verifyToken");
 const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield (0, verifyToken_1.getUser)(req.myAppToken);
+        const { userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate } = req.body;
+        console.log(userId);
         const { error } = (0, blogModel_1.joinBlogValidation)(req.body);
         if (error) {
             console.error(error);
