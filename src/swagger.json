@@ -809,7 +809,6 @@
         }
       },
       "required": [
-        "userId",
         "blogCategoryId",
         "blogTitle",
         "blogDescription",
