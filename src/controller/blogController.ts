@@ -24,7 +24,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
             // Create the blog
             Blog.create(req.body)
                 .then(blog => {
-                    res.status(200).json({blog,message: "Blog Created",status:200});
+                    res.status(200).json({blog,message: "BLOG CREATED !!!!",status:200});
                 })
         } else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED. ONLY ADMIN CAN POST BLOGS" });
