@@ -10,6 +10,9 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
         const user = await getUser((req as any).myAppToken);
         const {userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate} = req.body;
         console.log(userId);
+        if(!userId || !blogTitle || !blogCategoryId || !blogDescription || !blogContent || !blogImg || !blogDate){
+            return res.status(400).json({ message: "Please provide all required information to create a Blog!",status:400 });
+        }
         const {error} = joinBlogValidation(req.body);
         if(error){
             console.error(error);
