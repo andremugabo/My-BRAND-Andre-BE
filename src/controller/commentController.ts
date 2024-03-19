@@ -79,9 +79,9 @@ export const patchCommentByUserById = async (req: express.Request, res: express.
         const checkUser = await getUser((req as any).myAppToken);
         if (checkUser) {
             const userId: string = checkUser._id as string;
-
+            console.log(userId);
             const { commentId } = req.params;
-            
+            console.log(commentId);
             // Find the comment by its ID
             const comment = await Comment.findById(commentId);
             if (!comment) {

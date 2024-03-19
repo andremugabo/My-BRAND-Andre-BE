@@ -116,7 +116,9 @@ const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, f
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
             const userId = checkUser._id;
+            console.log(userId);
             const { commentId } = req.params;
+            console.log(commentId);
             // Find the comment by its ID
             const comment = yield commentModel_1.default.findById(commentId);
             if (!comment) {
