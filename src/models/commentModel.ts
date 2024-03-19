@@ -5,16 +5,14 @@ export interface IComment extends Document{
     userId:string;
     blogId:string;
     commentMsg:string;
-    commentLike:[ ]
-       
-    
+    commentLike:[];
     commentDate:string;
 }
 
 const commentSchema: Schema = new Schema({
     userId:{
         type:String,
-        required:[true],
+        required:true,
     },
     blogId:{
         type:String,

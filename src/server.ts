@@ -87,7 +87,7 @@ app.patch('/patchBlogById/:id',   verifyToken, patchBlogById);
 // DELETE BLOG BY ID
 app.delete('/deleteBlogById/:id',  verifyToken,  deleteBlog);
 
-// COMMENT APIs
+// COMMENT APIs for blog
 
 //CREATE A COMMENT
 app.post('/comments',   verifyToken, createComment);
