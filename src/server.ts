@@ -22,7 +22,10 @@ const port: number | string = process.env.HOST as string | number || 5000;
 const connection_url: string = process.env.DB_URL!;
 
 
-app.use(cors());
+const allowedOrigins = ['https://andremugabo.github.io'];
+app.use(cors({
+  origin: allowedOrigins
+}));
 app.use(bodyParser.json());
 
 

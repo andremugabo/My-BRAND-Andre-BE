@@ -5,7 +5,7 @@ export interface IComment extends Document{
     userId:string;
     blogId:string;
     commentMsg:string;
-    commentLike:[];
+    commentLike: string[];
     commentDate:string;
 }
 
@@ -22,7 +22,7 @@ const commentSchema: Schema = new Schema({
         type:String,
         required:[true,'Comment message is required'],
     },
-    commentLike: [],
+    commentLike:[],
     commentDate:{
         type:Date,
         default:Date  

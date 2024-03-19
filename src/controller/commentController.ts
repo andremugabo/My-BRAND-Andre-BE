@@ -78,24 +78,35 @@ export const patchCommentByUserById = async (req: express.Request, res: express.
     try {
         const checkUser = await getUser((req as any).myAppToken);
         if (checkUser) {
-            
-            const userId:string = checkUser._id;
-            const { commentId} = req.params;
-            const { action } = req.body;
-            console.log(commentId);
-            const checkIfCommentExist = await Comment.findById({commentId});
-            console.log(checkIfCommentExist);
+            const userId: string = checkUser._id as string;
 
-            const comment = await Comment.findOneAndUpdate({ userId, _id: commentId }, action, { new: true });
-            if (comment) {
+            const { commentId } = req.params;
+            
+            // Find the comment by its ID
+            const comment = await Comment.findById(commentId);
+            if (!comment) {
                 return res.status(404).json({ message: 'Comment not found' });
             }
-            return res.status(200).json({ message: 'Comment updated successfully', comment });
+
+            // Check if the user has already liked the comment
+            const isLiked = comment.commentLike.includes(userId);
+            if (isLiked) {
+                // If the user has already liked the comment, unlike it
+                comment.commentLike = comment.commentLike.filter((id) => id !== userId);
+            } else {
+                // If the user hasn't liked the comment, like it
+                comment.commentLike.push(userId);
+            }
+
+            // Save the updated comment
+            const updatedComment = await comment.save();
+
+            return res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment });
         } else {
-            res.status(401).json({ message: 'You are not authorized to update this comment' });
+            return res.status(401).json({ message: 'You are not authorized to update this comment' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
