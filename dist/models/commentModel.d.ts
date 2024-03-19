@@ -28,12 +28,7 @@ export interface IComment extends Document {
     userId: string;
     blogId: string;
     commentMsg: string;
-    commentLike: [
-        byUser: {
-            userId: string;
-            like: number;
-        }
-    ];
+    commentLike: string[];
     commentDate: string;
 }
 declare const Comment: mongoose.Model<IComment, {}, {}, {}, mongoose.Document<unknown, {}, IComment> & IComment & {

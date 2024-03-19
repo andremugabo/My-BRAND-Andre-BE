@@ -39,18 +39,21 @@ const verifyToken_1 = require("../authentication/verifyToken");
 const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield (0, verifyToken_1.getUser)(req.myAppToken);
-        const { error } = (0, blogModel_1.joinBlogValidation)(req.body);
-        if (error) {
-            console.error(error);
-            res.status(400).json({ error: error.details[0].message });
-            return;
-        }
-        // console.log(user)
         if (user && user.isAdmin) {
+            const { userId, blogTitle, blogCategoryId, blogDescription, blogContent, blogImg, blogDate } = req.body;
+            if (!userId || !blogTitle || !blogCategoryId || !blogDescription || !blogContent || !blogImg || !blogDate) {
+                return res.status(400).json({ message: "Please provide all required information to create a Blog!", status: 400 });
+            }
+            const { error } = (0, blogModel_1.joinBlogValidation)(req.body);
+            if (error) {
+                console.error(error);
+                res.status(400).json({ error: error.details[0].message });
+                return;
+            }
             // Create the blog
             blogModel_1.default.create(req.body)
                 .then(blog => {
-                res.status(200).json({ blog, message: "Blog Created" });
+                res.status(200).json({ blog, message: "BLOG CREATED !!!!", status: 200 });
             });
         }
         else {

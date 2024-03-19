@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchCommentByUserById = exports.fetchCommentByUser = exports.fetchAllComments = exports.createComment = void 0;
+exports.patchCommentByUserById = exports.fetchCommentByBlog = exports.fetchAllComments = exports.createComment = void 0;
 const commentModel_1 = __importStar(require("../models/commentModel"));
 const verifyToken_1 = require("../authentication/verifyToken");
 //create comment
@@ -86,18 +86,18 @@ const fetchAllComments = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.fetchAllComments = fetchAllComments;
 //fetch comment by user id
-const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const fetchCommentByBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
-            const { userId } = req.params;
-            console.log(userId);
-            const comment = yield commentModel_1.default.find({ userId: userId });
+            const { blogId } = req.params;
+            console.log(blogId);
+            const comment = yield commentModel_1.default.find({ blogId: blogId });
             if (comment.length !== 0) {
                 res.status(200).json(comment);
             }
             else {
-                res.status(400).json({ message: "THERE IS NO COMMENT DISPLAY FOR THE GIVEN USER" });
+                res.status(400).json({ message: "THERE IS NO COMMENT TO DISPLAY FOR THE GIVEN BLOG" });
             }
         }
         else {
@@ -109,7 +109,7 @@ const fetchCommentByUser = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).json({ message: error.message });
     }
 });
-exports.fetchCommentByUser = fetchCommentByUser;
+exports.fetchCommentByBlog = fetchCommentByBlog;
 //patch comment  by user id and comment id
 const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -117,23 +117,32 @@ const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, f
         if (checkUser) {
             const userId = checkUser._id;
             const { commentId } = req.params;
-            const { action } = req.body;
-            console.log(commentId);
-            const checkIfCommentExist = yield commentModel_1.default.findById({ commentId });
-            console.log(checkIfCommentExist);
-            const comment = yield commentModel_1.default.findOneAndUpdate({ userId, _id: commentId }, action, { new: true });
-            if (comment) {
+            // Find the comment by its ID
+            const comment = yield commentModel_1.default.findById(commentId);
+            if (!comment) {
                 return res.status(404).json({ message: 'Comment not found' });
             }
-            return res.status(200).json({ message: 'Comment updated successfully', comment });
+            // Check if the user has already liked the comment
+            const isLiked = comment.commentLike.includes(userId);
+            if (isLiked) {
+                // If the user has already liked the comment, unlike it
+                comment.commentLike = comment.commentLike.filter((id) => id !== userId);
+            }
+            else {
+                // If the user hasn't liked the comment, like it
+                comment.commentLike.push(userId);
+            }
+            // Save the updated comment
+            const updatedComment = yield comment.save();
+            return res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment });
         }
         else {
-            res.status(401).json({ message: 'You are not authorized to update this comment' });
+            return res.status(401).json({ message: 'You are not authorized to update this comment' });
         }
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 });
 exports.patchCommentByUserById = patchCommentByUserById;

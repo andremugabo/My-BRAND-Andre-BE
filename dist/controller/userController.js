@@ -88,7 +88,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const loginUser = yield usersModel_1.default.findOne({ email });
         if (!loginUser) {
-            return res.status(400).json({ message: "YOUR ARE REGISTERED !!!" });
+            return res.status(400).json({ message: "YOUR ARE NOT REGISTERED !!!" });
         }
         const checkPassword = yield bcrypt_1.default.compare(password, loginUser.password);
         if (!checkPassword) {
@@ -98,7 +98,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             sub: loginUser.id,
         };
         const loggedUser = loginUser.isAdmin;
-        const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_DECODE_KEY, { expiresIn: '5h' });
+        const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_DECODE_KEY, { expiresIn: '10h' });
         res.status(200).json({ token, loggedUser, loginUser });
     }
     catch (error) {

@@ -566,11 +566,11 @@
                 }
             }
         },
-        "/comment/{userId}": {
+        "/comment/{blogId}": {
             "get": {
                 "tags": ["Comment"],
-                "summary": "Fetch comments by user ID",
-                "description": "Retrieves comments by user ID",
+                "summary": "Fetch comments by Blog ID",
+                "description": "Retrieves comments by Blog ID",
                 "security": [
                     {
                         "JWT": []
@@ -578,9 +578,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": "userId",
+                        "name": "blogId",
                         "in": "path",
-                        "description": "ID of the user whose comments to fetch",
+                        "description": "Comment of the provided blog Id",
                         "required": true,
                         "type": "string"
                     }
@@ -782,9 +782,6 @@
         "Blog": {
             "type": "object",
             "properties": {
-                "userId": {
-                    "type": "string"
-                },
                 "blogCategoryId": {
                     "type": "string"
                 },
@@ -806,7 +803,6 @@
                 }
             },
             "required": [
-                "userId",
                 "blogCategoryId",
                 "blogTitle",
                 "blogDescription",
@@ -828,26 +824,7 @@
                     "type": "string"
                 },
                 "commentLike": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "byUser": {
-                                "type": "object",
-                                "properties": {
-                                    "userId": {
-                                        "type": "string"
-                                    },
-                                    "like": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "required": [
-                                    "userId"
-                                ]
-                            }
-                        }
-                    }
+                    "type": "array"
                 },
                 "commentDate": {
                     "type": "string",

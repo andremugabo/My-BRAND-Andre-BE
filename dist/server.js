@@ -40,47 +40,78 @@ const swaggerDocument = __importStar(require("./swagger.json"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT || 5000;
+// const allowedOrigins = ['https://andremugabo.github.io'];
+// app.use(cors({
+//   origin: allowedOrigins
+// }));
+const port = process.env.HOST || 5000;
 const connection_url = process.env.DB_URL;
-// CORS middleware
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5501');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    const allowedOrigins = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io']; // Add other allowed origins as needed
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, X-Requested-With, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
     next();
 });
 app.use(body_parser_1.default.json());
-// Routes
 app.get('/', (req, res) => {
     res.send('MY-BRAND-ANDRE-BE');
 });
-// User APIs
+/* USER APIs */
+// CREATE A USER
 app.post('/users', userController_1.createUser);
+//LOGIN 
 app.post('/user', userController_1.login);
+// FETCH ALL USER
 app.get('/users', verifyToken_1.verifyToken, userController_1.fetchUsers);
+// FETCH USERS BY ID
 app.get('/user/:id', verifyToken_1.verifyToken, userController_1.fetchUserById);
+// UPDATE USER BY ID
 app.patch('/user/:id', verifyToken_1.verifyToken, userController_1.patchUserById);
+// DELETE USER BY ID
 app.delete('/user/:id', verifyToken_1.verifyToken, userController_1.deleteUserById);
-// Category APIs
+// CATEGORY APIs
+//CREATE A CATEGORY
 app.post('/category', verifyToken_1.verifyToken, categoryController_1.createCategory);
+//FETCH ALL CATEGORY
 app.get('/categories', verifyToken_1.verifyToken, categoryController_1.fetchAllCategory);
+//DELETE CATEGORY BY ID
 app.delete('/category/:id', verifyToken_1.verifyToken, categoryController_1.deleteCategory);
-// Blog APIs
+// BLOG APIs
+// CREATE A BLOG
 app.post('/createBlogs', verifyToken_1.verifyToken, blogController_1.createBlog);
+// FETCH ALL BLOG
 app.get('/fetchBlogs', blogController_1.fetchBlog);
+// FETCH BLOG BY ID
 app.get('/fetchBlogById/:id', verifyToken_1.verifyToken, blogController_1.fetchBlogById);
+// UPDATE BLOG BY ID
 app.patch('/patchBlogById/:id', verifyToken_1.verifyToken, blogController_1.patchBlogById);
+// DELETE BLOG BY ID
 app.delete('/deleteBlogById/:id', verifyToken_1.verifyToken, blogController_1.deleteBlog);
-// Comment APIs
+// COMMENT APIs for blog
+//CREATE A COMMENT
 app.post('/comments', verifyToken_1.verifyToken, commentController_1.createComment);
+//FETCH ALL COMMENT
 app.get('/comments', verifyToken_1.verifyToken, commentController_1.fetchAllComments);
-app.get('/comment/:userId', verifyToken_1.verifyToken, commentController_1.fetchCommentByUser);
+//FETCH COMMENT BY USER
+app.get('/comment/:blogId', verifyToken_1.verifyToken, commentController_1.fetchCommentByBlog);
+//PATCH COMMENT BY USER ID AND COMMENT ID
 app.patch('/commentLike/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
-// Message APIs
+// MESSAGE APIs
+//CREATE A CONTACT MESSAGE
 app.post('/contactMsgs', contactMsgController_1.createContactMsg);
+//FETCH ALL CONTACT MSG
 app.get('/contactMsgs', verifyToken_1.verifyToken, contactMsgController_1.fetchAllContactMsg);
+//PATCH CONTACT MSG
 app.patch('/readMsg/:id', verifyToken_1.verifyToken, contactMsgController_1.patchContactMsgById);
-// Like APIs
+// LIKE APIs
 app.use('/swagger', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 mongoose_1.default.connect(connection_url)
     .then(() => {

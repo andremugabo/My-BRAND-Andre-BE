@@ -16,33 +16,33 @@ dotenv.config();
 
 
 const app = express();
-const allowedOrigins = ['https://andremugabo.github.io'];
-app.use(cors({
-  origin: allowedOrigins
-}));
+// const allowedOrigins = ['https://andremugabo.github.io'];
+// app.use(cors({
+//   origin: allowedOrigins
+// }));
 
 const port: number | string = process.env.HOST as string | number || 5000;
 const connection_url: string = process.env.DB_URL!;
 
 
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//     const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io']; // Add other allowed origins as needed
-//     const origin: string | undefined = req.headers.origin as string;
+app.use((req: Request, res: Response, next: NextFunction) => {
+    const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io']; // Add other allowed origins as needed
+    const origin: string | undefined = req.headers.origin as string;
   
-//     if (allowedOrigins.includes(origin)) {
-//       res.setHeader('Access-Control-Allow-Origin', origin);
-//     }
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
   
-//     res.setHeader('Access-Control-Allow-Headers', 'Accept, X-Requested-With, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-//     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Headers', 'Accept, X-Requested-With, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     
-//     if (req.method === 'OPTIONS') {
-//       return res.sendStatus(200);
-//     }
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
     
-//     next(); 
-//   });
+    next(); 
+  });
 app.use(bodyParser.json());
 
 

@@ -32,7 +32,7 @@ const joi_1 = __importDefault(require("joi"));
 const commentSchema = new mongoose_1.Schema({
     userId: {
         type: String,
-        required: [true],
+        required: true,
     },
     blogId: {
         type: String,
@@ -42,17 +42,7 @@ const commentSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'Comment message is required'],
     },
-    commentLike: [{
-            byUser: {
-                userId: {
-                    type: String
-                },
-                like: {
-                    type: Number,
-                    default: 0,
-                }
-            }
-        }],
+    commentLike: [],
     commentDate: {
         type: Date,
         default: Date
@@ -65,12 +55,7 @@ const joiCommentValidation = (commentEntry) => {
         userId: joi_1.default.string().required(),
         blogId: joi_1.default.string().required(),
         commentMsg: joi_1.default.string().min(3).max(5000).required(),
-        commentLike: joi_1.default.array().items(joi_1.default.object({
-            byUser: joi_1.default.object({
-                userId: joi_1.default.string(),
-                like: joi_1.default.number().default(0),
-            })
-        })).default([]),
+        commentLike: joi_1.default.array().default([]),
         commentDate: joi_1.default.date()
     });
     return schema.validate(commentEntry);
