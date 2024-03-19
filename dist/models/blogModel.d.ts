@@ -25,6 +25,7 @@
 import mongoose, { Document } from "mongoose";
 import joi from 'joi';
 export interface IBlog extends Document {
+    userId: string;
     blogCategoryId: string;
     blogTitle: string;
     blogDescription: string;

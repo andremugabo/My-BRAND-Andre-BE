@@ -30,6 +30,10 @@ exports.joinBlogValidation = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const joi_1 = __importDefault(require("joi"));
 const blogSchema = new mongoose_1.Schema({
+    userId: {
+        type: String,
+        required: true
+    },
     blogCategoryId: {
         type: String,
         required: true
@@ -59,6 +63,7 @@ const Blog = mongoose_1.default.model('Blog', blogSchema);
 exports.default = Blog;
 const joinBlogValidation = (blogEntry) => {
     const schema = joi_1.default.object({
+        userId: joi_1.default.string().required(),
         blogTitle: joi_1.default.string().required(),
         blogCategoryId: joi_1.default.string().required(),
         blogDescription: joi_1.default.string().min(10).max(500).required(),
