@@ -569,11 +569,11 @@
         }
       }
     },
-    "/comment/{userId}": {
+    "/comment/{blogId}": {
       "get": {
         "tags": ["Comment"],
-        "summary": "Fetch comments by user ID",
-        "description": "Retrieves comments by user ID",
+        "summary": "Fetch comments by Blog ID",
+        "description": "Retrieves comments by Blog ID",
         "security": [
           {
             "JWT": []
@@ -581,9 +581,9 @@
         ],
         "parameters": [
           {
-            "name": "userId",
+            "name": "blogId",
             "in": "path",
-            "description": "ID of the user whose comments to fetch",
+            "description": "Comment of the provided blog Id",
             "required": true,
             "type": "string"
           }
