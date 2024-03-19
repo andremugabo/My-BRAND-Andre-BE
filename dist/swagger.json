@@ -33,7 +33,6 @@
     ],
     "basePath": "/",
     "schemes": [
-        "http",
         "https"
     ],
     "securityDefinitions": {
