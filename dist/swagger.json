@@ -598,7 +598,7 @@
                 }
             }
         },
-        "/commentLike/{id}": {
+        "/commentLike/{CommentId}": {
             "patch": {
                 "tags": ["Comment"],
                 "summary": "Update comment by user ID and comment ID",
@@ -610,7 +610,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "Comment Id",
+                        "name": "CommentId",
                         "in": "path",
                         "description": "Id of a comment to like",
                         "required": true,
