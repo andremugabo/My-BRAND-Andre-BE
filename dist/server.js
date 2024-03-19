@@ -103,7 +103,7 @@ app.get('/comments', verifyToken_1.verifyToken, commentController_1.fetchAllComm
 //FETCH COMMENT BY USER
 app.get('/comment/:blogId', verifyToken_1.verifyToken, commentController_1.fetchCommentByBlog);
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/commentLike/:id', verifyToken_1.verifyToken, commentController_1.patchCommentByUserById);
+app.patch('/commentLike/:commentId', verifyToken_1.verifyToken, commentController_1.patchCommentByCommentById);
 // MESSAGE APIs
 //CREATE A CONTACT MESSAGE
 app.post('/contactMsgs', contactMsgController_1.createContactMsg);

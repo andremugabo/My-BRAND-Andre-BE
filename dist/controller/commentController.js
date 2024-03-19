@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchCommentByUserById = exports.fetchCommentByBlog = exports.fetchAllComments = exports.createComment = void 0;
+exports.patchCommentByCommentById = exports.fetchCommentByBlog = exports.fetchAllComments = exports.createComment = void 0;
 const commentModel_1 = __importStar(require("../models/commentModel"));
 const verifyToken_1 = require("../authentication/verifyToken");
 //create comment
@@ -111,7 +111,7 @@ const fetchCommentByBlog = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.fetchCommentByBlog = fetchCommentByBlog;
 //patch comment  by user id and comment id
-const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const patchCommentByCommentById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
@@ -147,4 +147,4 @@ const patchCommentByUserById = (req, res) => __awaiter(void 0, void 0, void 0, f
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
-exports.patchCommentByUserById = patchCommentByUserById;
+exports.patchCommentByCommentById = patchCommentByCommentById;

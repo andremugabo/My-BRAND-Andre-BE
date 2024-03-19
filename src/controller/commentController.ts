@@ -74,13 +74,13 @@ export const fetchCommentByBlog = async(req: express.Request, res: express.Respo
     }
 }
 //patch comment  by user id and comment id
-export const patchCommentByUserById = async (req: express.Request, res: express.Response) => {
+export const patchCommentByCommentById = async (req: express.Request, res: express.Response) => {
     try {
         const checkUser = await getUser((req as any).myAppToken);
         if (checkUser) {
             const userId: string = checkUser._id as string;
             console.log(userId);
-            const { commentId } = req.params;
+            const {commentId} = req.params;
             console.log(commentId);
             // Find the comment by its ID
             const comment = await Comment.findById(commentId);

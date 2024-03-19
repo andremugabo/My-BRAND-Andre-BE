@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import { createUser, fetchUsers, fetchUserById, patchUserById, deleteUserById,login } from './controller/userController';
 import { createCategory,fetchAllCategory,deleteCategory } from './controller/categoryController';
 import { createBlog, fetchBlog, fetchBlogById ,patchBlogById, deleteBlog } from './controller/blogController';
-import { createComment,fetchCommentByBlog,fetchAllComments,patchCommentByUserById } from './controller/commentController';
+import { createComment,fetchCommentByBlog,fetchAllComments,patchCommentByCommentById } from './controller/commentController';
 import { createContactMsg, fetchAllContactMsg, patchContactMsgById } from './controller/contactMsgController';
 import { verifyToken } from './authentication/verifyToken';
 import swaggerUi from 'swagger-ui-express'; 
@@ -105,7 +105,7 @@ app.get('/comments',  verifyToken, fetchAllComments);
 //FETCH COMMENT BY USER
 app.get('/comment/:blogId',  verifyToken, fetchCommentByBlog); 
 //PATCH COMMENT BY USER ID AND COMMENT ID
-app.patch('/commentLike/:id',  verifyToken, patchCommentByUserById);
+app.patch('/commentLike/:commentId',  verifyToken, patchCommentByCommentById);
 
 // MESSAGE APIs
 
