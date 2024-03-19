@@ -126,21 +126,14 @@ const patchCommentByCommentById = (req, res) => __awaiter(void 0, void 0, void 0
             }
             // Check if the user has already liked the comment
             const isLiked = comment.commentLike.includes(userId);
-            // if (isLiked) {
-            // If the user has already liked the comment, unlike it
-            // comment.commentLike = comment.commentLike.filter((id) => id !== userId);
-            for (let i = 0; i < comment.commentLike.length; i++) {
-                if (comment.commentLike[i] === userId) {
-                    comment.commentLike.splice(i, 1);
-                    return;
-                }
-                else {
-                    comment.commentLike.push(userId);
-                }
+            if (isLiked) {
+                // If the user has already liked the comment, unlike it
+                comment.commentLike = comment.commentLike.filter((id) => id !== userId);
             }
-            // } else {
-            //     // If the user hasn't liked the comment, like it
-            // }
+            else {
+                // If the user hasn't liked the comment, like it
+                comment.commentLike.push(userId);
+            }
             // Save the updated comment
             const updatedComment = yield comment.save();
             return res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment });
