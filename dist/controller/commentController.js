@@ -50,7 +50,7 @@ const createComment = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const checkUser = yield (0, verifyToken_1.getUser)(req.myAppToken);
         if (checkUser) {
             const comments = yield commentModel_1.default.create(req.body);
-            res.status(200).json(comments);
+            res.status(200).json({ comments, message: "COMMENT CREATED SUCCESSFULLY", status: 200 });
         }
         else {
             res.status(401).json({ message: "YOU NEED TO LOGIN FIRST" });
