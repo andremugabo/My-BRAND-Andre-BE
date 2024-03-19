@@ -16,11 +16,16 @@ dotenv.config();
 
 
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+
 
 const port: number | string = process.env.HOST as string | number || 5000;
 const connection_url: string = process.env.DB_URL!;
+
+
+app.use(cors());
+app.use(bodyParser.json());
+
+
 
 
 
