@@ -5,12 +5,7 @@ export interface IComment extends Document{
     userId:string;
     blogId:string;
     commentMsg:string;
-    commentLike:[
-         byUser:{
-            userId:string,
-            like:number
-        }
-    ]
+    commentLike:[]
        
     
     commentDate:string;
@@ -29,17 +24,7 @@ const commentSchema: Schema = new Schema({
         type:String,
         required:[true,'Comment message is required'],
     },
-    commentLike: [{
-        byUser: {
-            userId: {
-                type: String
-            },
-            like: {
-                type: Number,
-                default: 0,
-            }
-        }
-    }],
+    commentLike: [],
     commentDate:{
         type:Date,
         default:Date  
@@ -53,12 +38,7 @@ export const joiCommentValidation = (commentEntry: IComment)=>{
         userId : joi.string().required(),
         blogId : joi.string().required(),
         commentMsg: joi.string().min(3).max(5000).required(),
-        commentLike: joi.array().items(joi.object({
-            byUser: joi.object({
-                userId: joi.string(),
-                like: joi.number().default(0),
-            })
-        })).default([]),
+        commentLike: joi.array().default([]),
         commentDate: joi.date()
     });
      return schema.validate(commentEntry);
