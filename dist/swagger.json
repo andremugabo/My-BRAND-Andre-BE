@@ -615,14 +615,6 @@
                         "description": "Id of a comment to like",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "Like comment",
-                        "schema": {
-                            "$ref": "#/definitions/Comment"
-                        }
                     }
                 ],
                 "responses": {
