@@ -94,8 +94,10 @@ export const patchCommentByCommentById = async (req: express.Request, res: expre
                 // If the user has already liked the comment, unlike it
                 // comment.commentLike = comment.commentLike.filter((id) => id !== userId);
                 for(let i = 0; i < comment.commentLike.length; i++){
-                    if(comment.commentLike[i] === userId)
+                    if(comment.commentLike[i] === userId){
                         comment.commentLike.splice(i,1);
+                    }
+                        
                     }
             } else {
                 // If the user hasn't liked the comment, like it

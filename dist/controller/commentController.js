@@ -130,8 +130,9 @@ const patchCommentByCommentById = (req, res) => __awaiter(void 0, void 0, void 0
                 // If the user has already liked the comment, unlike it
                 // comment.commentLike = comment.commentLike.filter((id) => id !== userId);
                 for (let i = 0; i < comment.commentLike.length; i++) {
-                    if (comment.commentLike[i] === userId)
+                    if (comment.commentLike[i] === userId) {
                         comment.commentLike.splice(i, 1);
+                    }
                 }
             }
             else {
