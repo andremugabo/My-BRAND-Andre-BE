@@ -132,6 +132,7 @@ const patchCommentByCommentById = (req, res) => __awaiter(void 0, void 0, void 0
             for (let i = 0; i < comment.commentLike.length; i++) {
                 if (comment.commentLike[i] === userId) {
                     comment.commentLike.splice(i, 1);
+                    return;
                 }
                 else {
                     comment.commentLike.push(userId);

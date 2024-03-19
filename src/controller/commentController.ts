@@ -96,6 +96,7 @@ export const patchCommentByCommentById = async (req: express.Request, res: expre
                 for(let i = 0; i < comment.commentLike.length; i++){
                     if(comment.commentLike[i] === userId){
                         comment.commentLike.splice(i,1);
+                        return;
                     }else{
                         comment.commentLike.push(userId);
                     }
