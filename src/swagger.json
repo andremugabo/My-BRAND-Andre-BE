@@ -569,7 +569,7 @@
         }
       }
     },
-    "/comment/{userId}": {
+    "/comment/{blogId}": {
       "get": {
         "tags": ["Comment"],
         "summary": "Fetch comments by Blog ID",

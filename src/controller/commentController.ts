@@ -61,7 +61,7 @@ export const fetchCommentByBlog = async(req: express.Request, res: express.Respo
             if(comment.length !== 0){
                 res.status(200).json(comment);
             }else{
-                res.status(400).json({message:"THERE IS NO COMMENT DISPLAY FOR THE GIVEN BLOG"});
+                res.status(400).json({message:"THERE IS NO COMMENT TO DISPLAY FOR THE GIVEN BLOG"});
             }
             
         } else{
