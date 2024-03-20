@@ -790,7 +790,7 @@
                 },
                 "blogDate": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date"
                 }
             },
             "required": [
@@ -819,7 +819,7 @@
                 },
                 "commentDate": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date"
                 }
             },
             "required": [
@@ -849,13 +849,18 @@
                         "0"
                     ],
                     "default": 0
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
                 }
             },
             "required": [
                 "name",
                 "email",
                 "msg",
-                "read"
+                "read",
+                "date"
             ]
         }
     }

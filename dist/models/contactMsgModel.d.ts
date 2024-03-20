@@ -29,6 +29,7 @@ export interface IContactMsg extends Document {
     email: string;
     msg: string;
     read: '1' | '0';
+    date: Date;
 }
 declare const ContactMsg: mongoose.Model<IContactMsg, {}, {}, {}, mongoose.Document<unknown, {}, IContactMsg> & IContactMsg & {
     _id: mongoose.Types.ObjectId;

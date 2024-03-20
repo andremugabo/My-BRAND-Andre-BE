@@ -6,6 +6,7 @@ export interface IContactMsg extends Document{
     email:string;
     msg:string;
     read:'1'|'0';
+    date:Date;
 }
 
 const contactMsgSchema: Schema = new Schema({
@@ -25,6 +26,10 @@ const contactMsgSchema: Schema = new Schema({
       type:String,
       enum:['1','0'],
       default: '0'
+    },
+    date: {
+        type: Date,
+        default: Date
     }
 });
 
@@ -35,7 +40,8 @@ export const joiContactMsg = (contactMsgEntry:IContactMsg)=>{
         name : joi.string().required(),
         email:joi.string().email({minDomainSegments:2,tlds:{allow:['com','net']}}).required(),
         msg: joi.string().min(10).max(1000).required(),
-        read: joi.string().valid('1', '0').default('0')
+        read: joi.string().valid('1', '0').default('0'),
+        date: joi.date()
     })
     return schema.validate(contactMsgEntry);
 }

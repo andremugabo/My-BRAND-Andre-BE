@@ -56,7 +56,7 @@ const blogSchema = new mongoose_1.Schema({
     },
     blogDate: {
         type: Date,
-        default: Date.now
+        default: Date
     }
 });
 const Blog = mongoose_1.default.model('Blog', blogSchema);

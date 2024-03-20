@@ -7,8 +7,8 @@ import { getUser } from '../authentication/verifyToken';
 //create contactMsg
 export const createContactMsg = async(req: express.Request, res: express.Response)=>{
     try {
-        const {name , email, msg} = req.body;
-        if(!name || !email || !msg){
+        const {name , email, msg, date} = req.body;
+        if(!name || !email || !msg || !date){
             return res.status(400).json({message:"Please fill out all required information "});
         }
 

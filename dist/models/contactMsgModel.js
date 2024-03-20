@@ -46,6 +46,10 @@ const contactMsgSchema = new mongoose_1.Schema({
         type: String,
         enum: ['1', '0'],
         default: '0'
+    },
+    date: {
+        type: Date,
+        default: Date
     }
 });
 const ContactMsg = mongoose_1.default.model('ContactMsg', contactMsgSchema);
@@ -55,7 +59,8 @@ const joiContactMsg = (contactMsgEntry) => {
         name: joi_1.default.string().required(),
         email: joi_1.default.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         msg: joi_1.default.string().min(10).max(1000).required(),
-        read: joi_1.default.string().valid('1', '0').default('0')
+        read: joi_1.default.string().valid('1', '0').default('0'),
+        date: joi_1.default.date()
     });
     return schema.validate(contactMsgEntry);
 };

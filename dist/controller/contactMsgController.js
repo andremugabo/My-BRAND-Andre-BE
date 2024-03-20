@@ -38,8 +38,8 @@ const verifyToken_1 = require("../authentication/verifyToken");
 //create contactMsg
 const createContactMsg = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, msg } = req.body;
-        if (!name || !email || !msg) {
+        const { name, email, msg, date } = req.body;
+        if (!name || !email || !msg || !date) {
             return res.status(400).json({ message: "Please fill out all required information " });
         }
         const { error } = (0, contactMsgModel_1.joiContactMsg)(req.body);
