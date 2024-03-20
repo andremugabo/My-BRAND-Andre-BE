@@ -39,25 +39,24 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
 
 
 //fetch all blog
-export const fetchBlog = async(req: express.Request, res: express.Response)=>{
+export const fetchBlog = async (req: express.Request, res: express.Response) => {
     try {
-        let image:string;
-        let name:string;
         const blogs = await Blog.find({});
-        if(blogs.length === 0){
-            res.status(404).json({message:"THERE IS NO BLOG TO DISPLAY"})
-        }else{
-            for(let key of blogs){
-                const blogCreator = await Users.findOne({_id:key.userId});
-                console.log(blogCreator?.FullName);
-
-            }
-            res.status(200).json({blogs,status:200});
+        if (blogs.length === 0) {
+            return res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
+        } else {
+            const blogsWithCreators = await Promise.all(blogs.map(async (key) => {
+                const blogCreator = await Users.findOne({ _id: key.userId });
+                if (!blogCreator) {
+                    return { ...key.toObject(), creator: null };
+                }
+                return { ...key.toObject(), creator: { fullName: blogCreator.FullName, picture: blogCreator.picture } };
+            }));
+            return res.status(200).json({ blogs: blogsWithCreators });
         }
-        
     } catch (error) {
         console.log((error as Error).message);
-        res.status(500).json({message:(error as Error).message});   
+        return res.status(500).json({ message: (error as Error).message });
     }
 }
 

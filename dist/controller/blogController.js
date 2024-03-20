@@ -73,23 +73,24 @@ exports.createBlog = createBlog;
 //fetch all blog
 const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let image;
-        let name;
         const blogs = yield blogModel_1.default.find({});
         if (blogs.length === 0) {
-            res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
+            return res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
         }
         else {
-            for (let key of blogs) {
+            const blogsWithCreators = yield Promise.all(blogs.map((key) => __awaiter(void 0, void 0, void 0, function* () {
                 const blogCreator = yield usersModel_1.default.findOne({ _id: key.userId });
-                console.log(blogCreator === null || blogCreator === void 0 ? void 0 : blogCreator.FullName);
-            }
-            res.status(200).json({ blogs, status: 200 });
+                if (!blogCreator) {
+                    return Object.assign(Object.assign({}, key.toObject()), { creator: null });
+                }
+                return Object.assign(Object.assign({}, key.toObject()), { creator: { fullName: blogCreator.FullName, picture: blogCreator.picture } });
+            })));
+            return res.status(200).json({ blogs: blogsWithCreators });
         }
     }
     catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 });
 exports.fetchBlog = fetchBlog;
