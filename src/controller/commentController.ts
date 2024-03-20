@@ -93,6 +93,7 @@ export const patchCommentByCommentById = async (req: express.Request, res: expre
             if (isLiked) {
                 // If the user has already liked the comment, unlike it
                 comment.commentLike = comment.commentLike.filter((id) => id !== userId);
+                console.log(comment.commentLike);
             } else {
                 // If the user hasn't liked the comment, like it
                 comment.commentLike.push(userId);
