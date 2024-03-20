@@ -48,7 +48,7 @@ const createContactMsg = (req, res) => __awaiter(void 0, void 0, void 0, functio
             res.status(400).json({ error: error.details[0].message });
         }
         const contactMsgs = yield contactMsgModel_1.default.create(req.body);
-        res.status(200).json(contactMsgs);
+        res.status(200).json({ contactMsgs, status: 200, message: "YOUR MESSAGE SENT SUCCESSFULLY !!" });
     }
     catch (error) {
         console.log(error.message);
