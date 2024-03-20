@@ -16,10 +16,7 @@ dotenv.config();
 
 
 const app = express();
-// const allowedOrigins = ['https://andremugabo.github.io'];
-// app.use(cors({
-//   origin: allowedOrigins
-// }));
+
 
 const port: number | string = process.env.HOST as string | number || 5000;
 const connection_url: string = process.env.DB_URL!;
