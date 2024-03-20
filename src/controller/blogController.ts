@@ -44,7 +44,10 @@ export const fetchBlog = async(req: express.Request, res: express.Response)=>{
         if(blogs.length === 0){
             res.status(404).json({message:"THERE IS NO BLOG TO DISPLAY"})
         }else{
-            console.log(blogs);
+            
+            for(let key of blogs){
+                console.log(key);
+            }
             res.status(200).json({blogs,status:200});
         }
         

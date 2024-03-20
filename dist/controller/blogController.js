@@ -74,7 +74,9 @@ const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
         }
         else {
-            console.log(blogs);
+            for (let key of blogs) {
+                console.log(key);
+            }
             res.status(200).json({ blogs, status: 200 });
         }
     }
