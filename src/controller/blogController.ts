@@ -45,7 +45,7 @@ export const fetchBlog = async(req: express.Request, res: express.Response)=>{
             res.status(404).json({message:"THERE IS NO BLOG TO DISPLAY"})
         }else{
             console.log(blogs);
-            res.status(200).json(blogs);
+            res.status(200).json({blogs,status:200});
         }
         
     } catch (error) {

@@ -40,10 +40,6 @@ const swaggerDocument = __importStar(require("./swagger.json"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-// const allowedOrigins = ['https://andremugabo.github.io'];
-// app.use(cors({
-//   origin: allowedOrigins
-// }));
 const port = process.env.HOST || 5000;
 const connection_url = process.env.DB_URL;
 app.use((req, res, next) => {
