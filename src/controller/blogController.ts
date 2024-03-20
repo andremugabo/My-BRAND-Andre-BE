@@ -42,6 +42,7 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
 export const fetchBlog = async(req: express.Request, res: express.Response)=>{
     try {
         let image:string;
+        let name:string;
         const blogs = await Blog.find({});
         if(blogs.length === 0){
             res.status(404).json({message:"THERE IS NO BLOG TO DISPLAY"})

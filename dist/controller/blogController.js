@@ -74,6 +74,7 @@ exports.createBlog = createBlog;
 const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let image;
+        let name;
         const blogs = yield blogModel_1.default.find({});
         if (blogs.length === 0) {
             res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
