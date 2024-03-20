@@ -31,10 +31,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteBlog = exports.patchBlogById = exports.fetchBlogById = exports.fetchBlog = exports.createBlog = void 0;
 const blogModel_1 = __importStar(require("../models/blogModel"));
 const verifyToken_1 = require("../authentication/verifyToken");
+const usersModel_1 = __importDefault(require("../models/usersModel"));
 //create blog
 const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -69,13 +73,15 @@ exports.createBlog = createBlog;
 //fetch all blog
 const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let image;
         const blogs = yield blogModel_1.default.find({});
         if (blogs.length === 0) {
             res.status(404).json({ message: "THERE IS NO BLOG TO DISPLAY" });
         }
         else {
             for (let key of blogs) {
-                console.log(key._id);
+                const blogCreator = yield usersModel_1.default.findOne({ userId: key.userId });
+                console.log(blogCreator);
             }
             res.status(200).json({ blogs, status: 200 });
         }

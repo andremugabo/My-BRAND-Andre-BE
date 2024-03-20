@@ -2,6 +2,7 @@ import express from 'express';
 import Blog,{IBlog, joinBlogValidation} from '../models/blogModel';
 import  jwt, { VerifyErrors }  from 'jsonwebtoken';
 import { getUser } from '../authentication/verifyToken';
+import Users from '../models/usersModel';
 
 
 //create blog
@@ -40,13 +41,16 @@ export const createBlog = async (req: express.Request, res: express.Response) =>
 //fetch all blog
 export const fetchBlog = async(req: express.Request, res: express.Response)=>{
     try {
+        let image:string;
         const blogs = await Blog.find({});
         if(blogs.length === 0){
             res.status(404).json({message:"THERE IS NO BLOG TO DISPLAY"})
         }else{
             
             for(let key of blogs){
-                console.log(key._id);
+                const blogCreator = await Users.findOne({userId:key.userId});
+                console.log(blogCreator);
+
             }
             res.status(200).json({blogs,status:200});
         }
