@@ -23,7 +23,7 @@ const connection_url: string = process.env.DB_URL!;
 
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io']; // Add other allowed origins as needed
+    const allowedOrigins: string[] = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io','*']; // Add other allowed origins as needed
     const origin: string | undefined = req.headers.origin as string;
   
     if (allowedOrigins.includes(origin)) {

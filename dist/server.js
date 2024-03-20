@@ -43,7 +43,7 @@ const app = (0, express_1.default)();
 const port = process.env.HOST || 5000;
 const connection_url = process.env.DB_URL;
 app.use((req, res, next) => {
-    const allowedOrigins = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io']; // Add other allowed origins as needed
+    const allowedOrigins = ['https://my-brand-andre-be.onrender.com', 'http://127.0.0.1:5501', 'https://andremugabo.github.io', '*']; // Add other allowed origins as needed
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
