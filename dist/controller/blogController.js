@@ -81,7 +81,7 @@ const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             for (let key of blogs) {
                 const blogCreator = yield usersModel_1.default.findOne({ _id: key.userId });
-                console.log(blogCreator);
+                console.log(blogCreator === null || blogCreator === void 0 ? void 0 : blogCreator.FullName);
             }
             res.status(200).json({ blogs, status: 200 });
         }
