@@ -48,7 +48,7 @@ export const fetchBlog = async(req: express.Request, res: express.Response)=>{
         }else{
             
             for(let key of blogs){
-                const blogCreator = await Users.findOne({userId:key.userId});
+                const blogCreator = await Users.findOne({_id:key.userId});
                 console.log(blogCreator);
 
             }
