@@ -85,7 +85,7 @@ const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 }
                 return Object.assign(Object.assign({}, key.toObject()), { creator: { fullName: blogCreator.FullName, picture: blogCreator.picture } });
             })));
-            return res.status(200).json({ blogs: blogsWithCreators });
+            return res.status(200).json({ blogs: blogsWithCreators, status: 200 });
         }
     }
     catch (error) {

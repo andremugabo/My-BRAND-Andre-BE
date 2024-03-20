@@ -52,7 +52,7 @@ export const fetchBlog = async (req: express.Request, res: express.Response) => 
                 }
                 return { ...key.toObject(), creator: { fullName: blogCreator.FullName, picture: blogCreator.picture } };
             }));
-            return res.status(200).json({ blogs: blogsWithCreators });
+            return res.status(200).json({ blogs: blogsWithCreators,status:200 });
         }
     } catch (error) {
         console.log((error as Error).message);
