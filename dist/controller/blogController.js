@@ -75,7 +75,7 @@ const fetchBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             for (let key of blogs) {
-                console.log(key);
+                console.log(key._id);
             }
             res.status(200).json({ blogs, status: 200 });
         }
