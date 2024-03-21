@@ -58,7 +58,7 @@ export const patchContactMsgById = async(req: express.Request, res: express.Resp
             if(!readMsg){
                 return res.status(404).json({message:`Cannot find a message with  ID ${id}`})
             }
-            res.status(200).json(readMsg);
+            res.status(200).json({readMsg,status:200});
         } else{
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO READ MESSAGE" });
         }
