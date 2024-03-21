@@ -123,7 +123,7 @@ const patchBlogById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             if (!blog) {
                 return res.status(404).json({ message: `Cannot find any user with ID${id}` });
             }
-            res.status(200).json({ blog, message: "BLOG UPDATED SUCCESSFULLY" });
+            res.status(200).json({ blog, message: "BLOG UPDATED SUCCESSFULLY", status: 200 });
         }
         else {
             res.status(401).json({ message: "YOU ARE NOT AUTHORIZED TO EDIT A BLOG" });
